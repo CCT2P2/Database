@@ -1,6 +1,157 @@
-@database_HostAddress = http://localhost:5150
+﻿@database_HostAddress = http://localhost:5150
 
-GET {{database_HostAddress}}/weatherforecast/
+
+### login part 1
+POST {{database_HostAddress}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "string",
+  "password": "string"
+}
+
+### login part 2
+GET {{database_HostAddress}}/auth/login
 Accept: application/json
 
-###
+### register part 1
+POST {{database_HostAddress}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "string",
+  "username": "string",
+  "password": "string"
+}
+
+### register part 2
+GET {{database_HostAddress}}/auth/register
+Accept: application/json
+
+### GET user
+GET {{database_HostAddress}}/user/profile/{user_id}
+Accept: application/json
+
+### DELETE USER ACCOUNT
+DELETE {{database_HostAddress}}/user/remove/{user_id}
+Accept: Digest {$returncode}
+
+### UPDATE user
+POST {{database_HostAddress}}/user/update/{user_id}
+Content-Type: application/json
+
+{
+  "img_path": "string",
+  "password": "string",
+  "communities": "string"
+}
+
+
+###  Create community p. 2
+POST {{database_HostAddress}}/api/community/create
+Content-Type: application/json
+
+{
+  "name": "string",
+  "description": "string",
+  "img_path": "string",
+  "tags": ["int"]
+}
+
+###  Create community p. 2
+GET {{database_HostAddress}}/api/community/list
+Accept: application/json
+
+### Get community
+POST {{database_HostAddress}}/api/community/details/{community_id}
+Content-Type: application/json
+
+{
+  "id": "INT",
+  "name": "string",
+  "description": "string",
+  "img_path": "string",
+  "member_count": "int",
+  "tags": ["INT"],
+  "post_ids": ["INT"]
+}
+
+### Update community
+PUT {{database_HostAddress}}/api/community/edit/{community_id}
+Content-Type: application/json
+
+{
+  "description": "string",
+  "img_path": "string"
+}
+
+### Update community p. 2
+PUT {{database_HostAddress}}/api/community/verify/{community_id}
+Accept: Digest {$returncode}
+
+### Update community member p. 1
+PUT {{database_HostAddress}}/api/community/members/update/{community_id}
+Content-Type: application/json
+
+{
+  "member_count": "int"
+}
+
+### delete community
+DELETE {{database_HostAddress}}/api/community/remove/{community_id}
+Accept: Digest {$returncode}
+
+
+### Update community member p. 2
+PUT {{database_HostAddress}}/api/community/members/verify/{community_id}
+Accept: application/json
+
+### Create Post
+POST {{database_HostAddress}}/api/post/create
+Content-Type: application/json
+
+{
+  "title": "string",
+  "main_text": "string",
+  "auth_id": "INT",
+  "com_id": "INT",
+  "post_id_ref": "INT",
+  "comment_flag": "boolean"
+}
+
+### GET post
+GET {{database_HostAddress}}/api/post/view/{post_id}
+Accept: application/json
+
+### Update post
+PUT {{database_HostAddress}}/api/post/edit/{post_id}
+Content-Type: application/json
+
+{
+  "title": "string",
+  "main_text": "string"
+}
+
+### Delete post
+DELETE {{database_HostAddress}}/api/post/remove/{post_id}
+Accept: Digest {$returncode}
+
+
+### Like / Dislike
+PUT {{database_HostAddress}}/api/post/vote/{post_id}
+Content-Type: application/json
+
+{
+  "likes": "int",
+  "dislikes": "int"
+}
+
+### Comments
+PUT {{database_HostAddress}}/api/post/comments/{post_id}
+Content-Type: application/json
+
+{
+  "Comments": "INT[]"
+}
+
+### Search Posts
