@@ -1,18 +1,23 @@
-# Use a stable version of Python
-FROM python:3.9
+﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+USER $APP_UID
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
 
-# Set working directory to /src
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["database.csproj", "./"]
+RUN dotnet restore "database.csproj"
+COPY . .
+WORKDIR "/src/"
+RUN dotnet build "database.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Copy requirements.txt to /src and install dependencies
-COPY requirements.txt /src/requirements.txt
-RUN pip install --no-cache-dir --upgrade -r /src/requirements.txt
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "database.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Copy all application code from src to /src
-COPY ./src /src
-
-# Expose the application port (default FastAPI port is 8000)
-EXPOSE 80
-
-# Run the application using Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "database.dll"]
