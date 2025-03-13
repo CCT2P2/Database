@@ -155,3 +155,13 @@ Content-Type: application/json
 }
 
 ### Search Posts
+GET {{database_HostAddress}}/api/post/search?q=example
+Accept: application/json
+
+### Search Communities
+GET {{database_HostAddress}}/api/community/search?q=example
+Accept: application/json
+
+### Search Users
+GET {{database_HostAddress}}/api/users/search?q=example
+Accept: application/json
