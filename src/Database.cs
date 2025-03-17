@@ -39,6 +39,10 @@ public class Database
             {
                 return reader.GetInt32(0);
             }
+            else
+            {
+                return -1;
+            }
         }
 
         return null;
@@ -47,6 +51,10 @@ public class Database
 
     public int? RegisterUser(string email, string username, string password)
     {
+        if (LoginUser(username, "dummy") != null)
+        {
+            return -1;
+        }
         SQLiteCommand command = new SQLiteCommand("INSERT INTO USER (EMAIL, USER_NAME, PASSWORD) VALUES (@email, @username, @password)", _connection);
         command.Parameters.AddWithValue("@email", email);
         command.Parameters.AddWithValue("@username", username);
@@ -69,7 +77,7 @@ public class Database
         SQLiteDataReader reader = command.ExecuteReader();
         if (reader.Read())
         {
-            int ID = reader.GetInt16(0); 
+            int ID = reader.GetInt16(0);
             string email = reader.GetString(1);
             string username = reader.GetString(2);
             string? img_path = reader.GetString(4);//
