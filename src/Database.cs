@@ -81,14 +81,15 @@ public class Database
         {
             string email = reader.GetString(1);
             string username = reader.GetString(2);
-            string? img_path = reader.GetString(4);//
-            string? post_IDS = reader.GetString(5);//
-            string? COMM_IDS = reader.GetString(6);//
-            string? tags = reader.GetString(8);//
+            string? img_path = reader.GetString(4); //
+            string? post_IDS = reader.GetString(5); //
+            string? COMM_IDS = reader.GetString(6); //
+            string? tags = reader.GetString(8); //
             bool admin = reader.GetBoolean(7);
 
             return $"{{USER_ID: {id}EMAIL: {email}, USERNAME: {username}, IMG_PATH: {img_path}, POST_IDS: {post_IDS}, COMM_IDS: {COMM_IDS}, tags: {tags}, admin: {admin} }}";
         }
+
         return null;
     }
 
@@ -106,7 +107,9 @@ public class Database
 
     public int UpdateUser(int id, string img_path, string password)
     {
-        SQLiteCommand command = new SQLiteCommand("UPDATE USER SET PASSWORD = @password, IMG_PATH = @img_path WHERE USER_ID = @id", _connection);
+        SQLiteCommand command =
+            new SQLiteCommand("UPDATE USER SET PASSWORD = @password, IMG_PATH = @img_path WHERE USER_ID = @id",
+                _connection);
         command.Parameters.AddWithValue("@id", id);
         command.Parameters.AddWithValue("@password", password);
         command.Parameters.AddWithValue("@img_path", img_path);
@@ -120,7 +123,10 @@ public class Database
 
     public int CreateCommunity(string name, string tags, string description, string? imagePath)
     {
-        SQLiteCommand command = new SQLiteCommand("INSERT INTO COMMUNITY (COMMUNITY_NAME, TAGS, COMMUNITY_DESCRIPTION, IMAGE_PATH) VALUES (@name, @tags, @description, @imagePath)", _connection);
+        SQLiteCommand command =
+            new SQLiteCommand(
+                "INSERT INTO COMMUNITY (COMMUNITY_NAME, TAGS, COMMUNITY_DESCRIPTION, IMAGE_PATH) VALUES (@name, @tags, @description, @imagePath)",
+                _connection);
         command.Parameters.AddWithValue("@name", name);
         command.Parameters.AddWithValue("@tags", tags);
         command.Parameters.AddWithValue("@description", description);
@@ -134,6 +140,7 @@ public class Database
         {
             Console.WriteLine(e.Message);
         }
+
         return 0;
     }
     
@@ -254,6 +261,7 @@ public class Database
         {
             ids.Add(reader.GetInt32(0));
         }
+
         int temp = 0;
         if (ids.Count == 0)
         {
@@ -282,6 +290,7 @@ public class Database
         {
             ids.Add(reader.GetInt32(0));
         }
+
         int temp = 0;
         if (ids.Count == 0)
         {
@@ -310,6 +319,7 @@ public class Database
         {
             ids.Add(reader.GetInt32(0));
         }
+
         int temp = 100;
         if (ids.Count == 0)
         {
@@ -328,5 +338,29 @@ public class Database
         }
         return temp + 1;
     }
+
+    public void GetCommunity(int id)
+    {
+        SQLiteCommand command = new SQLiteCommand("SELECT * COMMUNITY", _connection);
+        SQLiteDataReader reader = command.ExecuteReader();
+        
+        while (reader.Read())
+        {
+            int communityId  = reader.GetInt16(0);
+            string communityName = reader.GetString(1); 
+            string? communityDescription = reader.GetString(2); 
+            string? img_path = reader.GetString(3);
+            int memberCount = reader.GetInt32(4); 
+            string tags = reader.GetString(5);
+            string? post_IDS = reader.GetString(6);
+
+            ($"ID: {communityId}, community name: {communityName}, Community description: {communityDescription}, Image Path: {img_path}, Member count: {memberCount}, Tags: {tags}, Post IDS: {post_IDS}");
+        }
+
+        reader.Close();
+    
+        
+    }
+
 
 }
