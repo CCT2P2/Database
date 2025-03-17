@@ -13,7 +13,6 @@ public class Database
         OpenConnection();
     }
 
-    penis
     private void OpenConnection()
     {
         _connection.Open();
