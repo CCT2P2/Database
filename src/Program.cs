@@ -5,13 +5,13 @@ public class Program
     public static void Main(string[] args)
     {
         Database db = new Database();
-        Console.WriteLine(db.RegisterUser("diddy69@party.cum, "thegrTheGreatDiddler", "6969696));
+        Console.WriteLine(db.RegisterUser("diddy69@party.cum", "TheGreatDiddler", "6969696"));
         // fail
-        Console.WriteLine(db.LoginUser("AliceW", "123456"));
+        Console.WriteLine(db.LoginUser("TheGreatDiddler", "123456"));
 
         // sucsess
-        Console.WriteLine(db.LoginUser("AliceWTheGreatDiddler", "hashed_password_16"));
-        
+        Console.WriteLine(db.LoginUser("TheGreatDiddler", "696969"));
+
         // fail (but different) no user found
         Console.WriteLine(db.LoginUser("Skibidi", "bobbobS"));
 

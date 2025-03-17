@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SQLite;
 
@@ -54,18 +54,19 @@ public class Database
 
 
         SQLiteDataReader reader = command.ExecuteReader();
-        if (reader.Read()) {
-          return reader.GetInt16(0);
+        if (reader.Read())
+        {
+            return reader.GetInt16(0);
         }
-        
+        return null;
     }
 
     public string GetUser(int id)
     {
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM USER WHERE USER_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
-        
-        
+
+
 
         return "peepeepoopoo";
     }
