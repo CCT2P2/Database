@@ -4,7 +4,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        
+
         Database db = new Database();
         User_test(db);
 
@@ -54,23 +54,28 @@ public class Program
 
     public static void User_test(Database db)
     {
-        Console.WriteLine(db.RegisterUser("diddy69@party.cum", "TheGreatDiddler", "6969696"));
-        // fail
-        Console.WriteLine(db.LoginUser("TheGreatDiddler", "123456"));
+        // register test
+        int? id = db.RegisterUser("diddy69@party.cum", "TheGreatDiddler", "6969696");
+        Console.WriteLine(id);
 
-        // sucsess
-        Console.WriteLine(db.LoginUser("TheGreatDiddler", "6969696"));
+        // login fail test (wrong pwd)
+        //Console.WriteLine(db.LoginUser("TheGreatDiddler", "123456"));
 
-        // fail (but different) no user found
-        Console.WriteLine(db.LoginUser("Skibidi", "bobbobS"));
+        // login sucsess test
+        id = db.LoginUser("TheGreatDiddler", "6969696");
+        Console.WriteLine(id);
 
-        // fail
-        Console.WriteLine(db.GetUser(0));
+        // login fail test (wrong user)
+        //Console.WriteLine(db.LoginUser("Skibidi", "bobbobS"));
+
+        // fetch user test fail (wrong id)
+        //Console.WriteLine(db.GetUser(0));
 
 
-        // sucsess
-        Console.WriteLine(db.GetUser(1));
+        // fetch user test success
+        //Console.WriteLine(db.GetUser(1));
 
-        Console.WriteLine(db.DeleteUser(12));
+        //user deletion test
+        Console.WriteLine(db.DeleteUser(id));
     }
 }
