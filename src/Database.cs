@@ -53,7 +53,7 @@ public class Database
     {
         if (LoginUser(username, "dummy") != null)
         {
-            return -1;
+            return 204;
         }
         Int32 id = GetUserIDs();
         SQLiteCommand command = new SQLiteCommand("INSERT INTO USER (EMAIL, USER_NAME, PASSWORD) VALUES (@email, @username, @password)", _connection);
