@@ -143,7 +143,7 @@ public class Database
 
         return 0;
     }
-    
+
     public int DeletePost(int id)
     {
         SQLiteCommand command = new SQLiteCommand("DELETE FROM POSTS WHERE POST_ID = @id", _connection);
@@ -179,12 +179,12 @@ public class Database
 
             bool comment = reader.GetBoolean(reader.GetOrdinal("COMMENT_FLAG"));
             int commentCount = reader.GetInt32(reader.GetOrdinal("COMMENT_CNT"));
-            
-            
+
+
             return $"{{ID: {postId}, Title: {title}, Content: {content}, author_ID: {authorId} Community_id: {commId} Timestamp: {timestamp} likes: {likes} dislikes: {dislikes} post_id_ref: {postIdRef}, comment: {comment} Comment_cnt: {commentCount}}}";
-            
+
         }
-        
+
         reader.Close();
         return null;
     }
@@ -218,7 +218,7 @@ public class Database
         }
         return 207;
     }
-    
+
     public int CreatePost(string name, string main, int authID, int commID, int? postIdRef, bool comment)
     {
         int id = GetPostIDs(); // Ensure this generates a unique ID
@@ -227,26 +227,26 @@ public class Database
             new SQLiteCommand(
                 "INSERT INTO POSTS (POST_ID, TITLE, MAIN, AUTHOR_ID, COMMUNITY_ID, POST_ID_REF, COMMENT_FLAG, TIMESTAMP) VALUES (@id, @title, @main, @authID, @commID, @postIDRef, @comment, @time)",
                 _connection);
-        
-            command.Parameters.AddWithValue("@id", id);
-            command.Parameters.AddWithValue("@title", name);
-            command.Parameters.AddWithValue("@main", main);
-            command.Parameters.AddWithValue("@authID", authID);
-            command.Parameters.AddWithValue("@commID", commID);
 
-            // Correct handling of nullable values
-            command.Parameters.AddWithValue("@postIDRef", postIdRef.HasValue ? (object)postIdRef.Value : DBNull.Value);
-            command.Parameters.AddWithValue("@comment", comment);
+        command.Parameters.AddWithValue("@id", id);
+        command.Parameters.AddWithValue("@title", name);
+        command.Parameters.AddWithValue("@main", main);
+        command.Parameters.AddWithValue("@authID", authID);
+        command.Parameters.AddWithValue("@commID", commID);
 
-            // Store timestamp as an integer (Unix Time)
-            command.Parameters.AddWithValue("@time", (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+        // Correct handling of nullable values
+        command.Parameters.AddWithValue("@postIDRef", postIdRef.HasValue ? (object)postIdRef.Value : DBNull.Value);
+        command.Parameters.AddWithValue("@comment", comment);
 
-            int rowsAffected = command.ExecuteNonQuery();
-            if (rowsAffected > 0)
-            {
-                return id; // Return the generated post ID
-            }
-        
+        // Store timestamp as an integer (Unix Time)
+        command.Parameters.AddWithValue("@time", (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+
+        int rowsAffected = command.ExecuteNonQuery();
+        if (rowsAffected > 0)
+        {
+            return id; // Return the generated post ID
+        }
+
 
         return 0; // Return 0 if the insert fails
     }
@@ -339,27 +339,25 @@ public class Database
         return temp + 1;
     }
 
-    public void GetCommunity(int id)
+    public string GetCommunity(int id)
     {
-        SQLiteCommand command = new SQLiteCommand("SELECT * COMMUNITY", _connection);
+        SQLiteCommand command = new SQLiteCommand("SELECT * FROM COMMUNITY WHERE ID = @id", _connection);
+        command.Parameters.AddWithValue("@id", id);
         SQLiteDataReader reader = command.ExecuteReader();
-        
-        while (reader.Read())
+
+        if (reader.Read())
         {
-            int communityId  = reader.GetInt16(0);
-            string communityName = reader.GetString(1); 
-            string? communityDescription = reader.GetString(2); 
+            string communityName = reader.GetString(1);
+            string? communityDescription = reader.GetString(2);
             string? img_path = reader.GetString(3);
-            int memberCount = reader.GetInt32(4); 
+            int memberCount = reader.GetInt32(4);
             string tags = reader.GetString(5);
             string? post_IDS = reader.GetString(6);
 
-            ($"ID: {communityId}, community name: {communityName}, Community description: {communityDescription}, Image Path: {img_path}, Member count: {memberCount}, Tags: {tags}, Post IDS: {post_IDS}");
+            return ($"ID: {id}, community name: {communityName}, Community description: {communityDescription}, Image Path: {img_path}, Member count: {memberCount}, Tags: {tags}, Post IDS: {post_IDS}");
         }
 
-        reader.Close();
-    
-        
+        return "204";
     }
 
 
