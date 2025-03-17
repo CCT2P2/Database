@@ -74,7 +74,7 @@ public class Program
 
 
         // delete user test [passed]
-        // Console.WriteLine(db.DeleteUser(12));
+        // Console.WriteLine(db.DeleteUser(id));
 
 
     }
