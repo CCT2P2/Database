@@ -37,13 +37,12 @@ DELETE {{database_HostAddress}}/user/remove/{user_id}
 Accept: Digest {$returncode}
 
 ### UPDATE user
-POST {{database_HostAddress}}/user/update/{user_id}
+POST {{database_HostAddress}}/user/update/user/{user_id}
 Content-Type: application/json
 
 {
   "img_path": "string",
   "password": "string",
-  "communities": "string"
 }
 
 
@@ -77,7 +76,7 @@ Content-Type: application/json
 }
 
 ### Update community
-PUT {{database_HostAddress}}/api/community/edit/{community_id}
+PUT {{database_HostAddress}}/api/community/update/details/{community_id}
 Content-Type: application/json
 
 {
@@ -90,7 +89,7 @@ PUT {{database_HostAddress}}/api/community/verify/{community_id}
 Accept: Digest {$returncode}
 
 ### Update community member p. 1
-PUT {{database_HostAddress}}/api/community/members/update/{community_id}
+PUT {{database_HostAddress}}/api/community/members/update/members/{community_id}
 Content-Type: application/json
 
 {
@@ -124,7 +123,7 @@ GET {{database_HostAddress}}/api/post/view/{post_id}
 Accept: application/json
 
 ### Update post
-PUT {{database_HostAddress}}/api/post/edit/{post_id}
+PUT {{database_HostAddress}}/api/post/update/{post_id}
 Content-Type: application/json
 
 {
