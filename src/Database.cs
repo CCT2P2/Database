@@ -141,7 +141,7 @@ public class Database
             Console.WriteLine(e.Message);
         }
 
-        return 0;
+        return 200;
     }
 
     public int DeletePost(int id)
@@ -153,7 +153,7 @@ public class Database
         {
             return 200;
         }
-        return 207;
+        return 204;
     }
     public string GetPost(int id)
     {
@@ -200,7 +200,7 @@ public class Database
         {
             return 200;
         }
-        return 207;
+        return 204;
     }
 
     public int updatePostBackend(int post_id, int comment_count, string comments, int likes, int dislikes)
@@ -216,7 +216,7 @@ public class Database
         {
             return 200;
         }
-        return 207;
+        return 204;
     }
 
     public int CreatePost(string name, string main, int authID, int commID, int? postIdRef, bool comment)
@@ -248,7 +248,7 @@ public class Database
         }
 
 
-        return 0; // Return 0 if the insert fails
+        return 500; // Return 500 if the insert fails
     }
 
 
