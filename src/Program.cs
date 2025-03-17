@@ -56,14 +56,14 @@ public class Program
     {
         // register test
         int? id = db.RegisterUser("diddy69@party.cum", "TheGreatDiddler", "6969696");
-        Console.WriteLine(id);
+        Console.WriteLine($"User registered id: {id}");
 
         // login fail test (wrong pwd)
         //Console.WriteLine(db.LoginUser("TheGreatDiddler", "123456"));
 
         // login sucsess test
         id = db.LoginUser("TheGreatDiddler", "6969696");
-        Console.WriteLine(id);
+        Console.WriteLine($"User logged in id: {id}");
 
         // login fail test (wrong user)
         //Console.WriteLine(db.LoginUser("Skibidi", "bobbobS"));
@@ -76,6 +76,6 @@ public class Program
         //Console.WriteLine(db.GetUser(1));
 
         //user deletion test
-        Console.WriteLine(db.DeleteUser(id));
+        Console.WriteLine($"User deleted code: {db.DeleteUser(id)}");
     }
 }

@@ -40,7 +40,7 @@ public class Database
             }
             else
             {
-                return -1;
+                return 401;
             }
         }
 
@@ -102,7 +102,7 @@ public class Database
         {
             return 200;
         }
-        return 207;
+        return 204;
     }
 
     public int UpdateUser(int id, string img_path, string password)
@@ -116,7 +116,7 @@ public class Database
         {
             return 200;
         }
-        return 207;
+        return 204;
     }
 
     public int CreateCommunity(string name, string tags, string description, string? imagePath)
