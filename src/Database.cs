@@ -51,7 +51,7 @@ public class Database
 
     public int? RegisterUser(string email, string username, string password)
     //Registered user does not use first available ID, meaning if user.id 1 deletes account, user.id 1 will never be used again
-    //RegisterUser fails to return the ID of the newly registered user
+    //RegisterUser fails returns the ID of the newly registered user
     {
         if (LoginUser(username, "dummy") != null)
         {
@@ -97,6 +97,20 @@ public class Database
     {
         SQLiteCommand command = new SQLiteCommand("DELETE FROM USER WHERE USER_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
+
+        if (command.ExecuteNonQuery() > 0)
+        {
+            return 200;
+        }
+        return 207;
+    }
+
+    public int UpdateUser(int id, string img_path, string password)
+    {
+        SQLiteCommand command = new SQLiteCommand("UPDATE USER SET PASSWORD = @password, IMG_PATH = @img_path WHERE USER_ID = @id", _connection);
+        command.Parameters.AddWithValue("@id", id);
+        command.Parameters.AddWithValue("@password", password);
+        command.Parameters.AddWithValue("@img_path", img_path);
 
         if (command.ExecuteNonQuery() > 0)
         {
