@@ -4,6 +4,19 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        Database db = new Database();
+        Console.WriteLine(db.RegisterUser("diddy69@party.cum, "thegrTheGreatDiddler", "6969696));
+        // fail
+        Console.WriteLine(db.LoginUser("AliceW", "123456"));
+
+        // sucsess
+        Console.WriteLine(db.LoginUser("AliceWTheGreatDiddler", "hashed_password_16"));
+        
+        // fail (but different) no user found
+        Console.WriteLine(db.LoginUser("Skibidi", "bobbobS"));
+
+
+        /*
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
@@ -22,17 +35,8 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        app.UseAut
-
-
-
-
-
-
-
-
-
-horization();
+        app.UseAuthorization();
+        /*
 
         /* var summaries = new[]
         {
@@ -53,6 +57,6 @@ horization();
             })
             .WithName("GetWeatherForecast"); */
 
-        app.Run();
+        // app.Run();
     }
 }

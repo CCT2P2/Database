@@ -1,23 +1,36 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+﻿# Base image with SQLite pre-installed
+FROM alpine/sqlite:3.48 as base
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Release
+RUN apk add --no-cache \
+    icu-libs \
+    krb5-libs \
+    libgcc \
+    libintl \
+    libssl3 \
+    libstdc++ \
+    zlib \
+    && mkdir -p /app
+
+WORKDIR /app
+
+# Build stage using the .NET SDK
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
+
 WORKDIR /src
 COPY ["database.csproj", "./"]
 RUN dotnet restore "database.csproj"
+
 COPY . .
-WORKDIR "/src/"
-RUN dotnet build "database.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "database.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "database.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
+# Final stage: combine Alpine base with published app
 FROM base AS final
+
+COPY --from=build /app/publish /app
+
+EXPOSE 9012
+
 WORKDIR /app
-COPY --from=publish /app/publish .
+
 ENTRYPOINT ["dotnet", "database.dll"]
