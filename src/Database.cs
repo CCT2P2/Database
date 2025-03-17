@@ -78,7 +78,6 @@ public class Database
         SQLiteDataReader reader = command.ExecuteReader();
         if (reader.Read())
         {
-            int ID = reader.GetInt16(0);
             string email = reader.GetString(1);
             string username = reader.GetString(2);
             string? img_path = reader.GetString(4);//
@@ -87,7 +86,7 @@ public class Database
             string? tags = reader.GetString(8);//
             bool admin = reader.GetBoolean(7);
 
-            return $"{{USER_ID: {ID}EMAIL: {email}, USERNAME: {username}, IMG_PATH: {img_path}, POST_IDS: {post_IDS}, COMM_IDS: {COMM_IDS}, tags: {tags}, admin: {admin} }}";
+            return $"{{USER_ID: {id}EMAIL: {email}, USERNAME: {username}, IMG_PATH: {img_path}, POST_IDS: {post_IDS}, COMM_IDS: {COMM_IDS}, tags: {tags}, admin: {admin} }}";
         }
         return null;
     }
@@ -136,22 +135,114 @@ public class Database
         }
         return 0;
     }
-    public void GetPost(int id)
+    
+    public int DeletePost(int id)
     {
-        SQLiteCommand command = new SQLiteCommand("SELECT * FROM POSTS", _connection);
+        SQLiteCommand command = new SQLiteCommand("DELETE FROM POSTS WHERE POST_ID = @id", _connection);
+        command.Parameters.AddWithValue("@id", id);
+
+        if (command.ExecuteNonQuery() > 0)
+        {
+            return 200;
+        }
+        return 207;
+    }
+    public string GetPost(int id)
+    {
+        SQLiteCommand command = new SQLiteCommand("SELECT * FROM POSTS WHERE POST_ID = @id", _connection);
+        command.Parameters.AddWithValue("@id", id);
         SQLiteDataReader reader = command.ExecuteReader();
 
         while (reader.Read())
         {
-            int postId = reader.GetInt16(0); // or reader["Id"]
-            string title = reader.GetString(1); // or reader["Title"]
-            string content = reader.GetString(2); // or reader["Content"]
+            int postId = reader.GetInt32(reader.GetOrdinal("POST_ID"));
+            string title = reader.GetString(reader.GetOrdinal("TITLE"));
+            string content = reader.GetString(reader.GetOrdinal("MAIN"));
+            int authorId = reader.GetInt32(reader.GetOrdinal("AUTHOR_ID"));
+            int commId = reader.GetInt32(reader.GetOrdinal("COMMUNITY_ID"));
+            int timestamp = reader.GetInt32(reader.GetOrdinal("TIMESTAMP"));
+            int likes = reader.GetInt32(reader.GetOrdinal("LIKES"));
+            int dislikes = reader.GetInt32(reader.GetOrdinal("DISLIKES"));
 
-            Console.WriteLine($"ID: {postId}, Title: {title}, Content: {content}");
+            // Handle nullable 'POST_ID_REF'
+            int? postIdRef = reader.IsDBNull(reader.GetOrdinal("POST_ID_REF"))
+                ? (int?)null
+                : reader.GetInt32(reader.GetOrdinal("POST_ID_REF"));
+
+            bool comment = reader.GetBoolean(reader.GetOrdinal("COMMENT_FLAG"));
+            int commentCount = reader.GetInt32(reader.GetOrdinal("COMMENT_CNT"));
+            
+            
+            return $"{{ID: {postId}, Title: {title}, Content: {content}, author_ID: {authorId} Community_id: {commId} Timestamp: {timestamp} likes: {likes} dislikes: {dislikes} post_id_ref: {postIdRef}, comment: {comment} Comment_cnt: {commentCount}}}";
+            
         }
-
+        
         reader.Close();
+        return null;
     }
+
+    public int updatePostUser(int post_id, string title, string main)
+    {
+        SQLiteCommand command = new SQLiteCommand("UPDATE POSTS SET MAIN = @main, TITLE = @title  WHERE POST_ID = @id LIMIT 1", _connection);
+        command.Parameters.AddWithValue("@id", post_id);
+        command.Parameters.AddWithValue("@main", main);
+        command.Parameters.AddWithValue("@title", title);
+
+        if (command.ExecuteNonQuery() < 0)
+        {
+            return 200;
+        }
+        return 207;
+    }
+
+    public int updatePostBackend(int post_id, int comment_count, string comments, int likes, int dislikes)
+    {
+        SQLiteCommand command = new SQLiteCommand("UPDATE POSTS SET COMMENT_CNT = @comment_count, LIKES = @likes, DISLIKES = @dislikes, COMMENTS = @comments  WHERE POST_ID = @id LIMIT 1", _connection);
+        command.Parameters.AddWithValue("@id", post_id);
+        command.Parameters.AddWithValue("@comment_count", comment_count);
+        command.Parameters.AddWithValue("@likes", likes);
+        command.Parameters.AddWithValue("@dislikes", dislikes);
+        command.Parameters.AddWithValue("@comments", comments);
+
+        if (command.ExecuteNonQuery() < 0)
+        {
+            return 200;
+        }
+        return 207;
+    }
+    
+    public int CreatePost(string name, string main, int authID, int commID, int? postIdRef, bool comment)
+    {
+        int id = GetPostIDs(); // Ensure this generates a unique ID
+
+        SQLiteCommand command =
+            new SQLiteCommand(
+                "INSERT INTO POSTS (POST_ID, TITLE, MAIN, AUTHOR_ID, COMMUNITY_ID, POST_ID_REF, COMMENT_FLAG, TIMESTAMP) VALUES (@id, @title, @main, @authID, @commID, @postIDRef, @comment, @time)",
+                _connection);
+        
+            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@title", name);
+            command.Parameters.AddWithValue("@main", main);
+            command.Parameters.AddWithValue("@authID", authID);
+            command.Parameters.AddWithValue("@commID", commID);
+
+            // Correct handling of nullable values
+            command.Parameters.AddWithValue("@postIDRef", postIdRef.HasValue ? (object)postIdRef.Value : DBNull.Value);
+            command.Parameters.AddWithValue("@comment", comment);
+
+            // Store timestamp as an integer (Unix Time)
+            command.Parameters.AddWithValue("@time", (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+
+            int rowsAffected = command.ExecuteNonQuery();
+            if (rowsAffected > 0)
+            {
+                return id; // Return the generated post ID
+            }
+        
+
+        return 0; // Return 0 if the insert fails
+    }
+
 
     private int GetUserIDs()
     {
@@ -178,7 +269,7 @@ public class Database
                 break;
             }
         }
-        return temp;
+        return temp+1;
     }
     
     private int GetCommIDs()
@@ -206,7 +297,7 @@ public class Database
                 break;
             }
         }
-        return temp;
+        return temp+1;
     }
     
     public int GetPostIDs()
@@ -234,7 +325,7 @@ public class Database
                 break;
             }
         }
-        return temp;
+        return temp+1;
     }
 
 }
