@@ -83,6 +83,24 @@ public class Database
         return null;
     }
 
+    public int CreateCommunity(string name, string tags, string description, string? imagePath)
+    {
+        SQLiteCommand command = new SQLiteCommand("INSERT INTO COMMUNITY (COMMUNITY_NAME, TAGS, COMMUNITY_DESCRIPTION, IMAGE_PATH) VALUES (@name, @tags, @description, @imagePath)", _connection);
+        command.Parameters.AddWithValue("@name", name);
+        command.Parameters.AddWithValue("@tags", tags);
+        command.Parameters.AddWithValue("@description", description);
+        command.Parameters.AddWithValue("@imagePath", imagePath);
+
+        try
+        {
+            command.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        return 0;
+    }
     public void GetPost(int id)
     {
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM POSTS", _connection);
@@ -100,5 +118,88 @@ public class Database
         reader.Close();
     }
 
+    private int GetUserIDs()
+    {
+        List<int> ids = new List<int>();
+        SQLiteCommand command = new SQLiteCommand("SELECT * FROM USER", _connection);
+        SQLiteDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            ids.Add(reader.GetInt32(0));
+        }
+        int temp = 0;
+        if (ids.Count == 0)
+        {
+            throw new Exception("No users found in the database.");
+        } 
+        foreach (int id in ids)
+        {
+            if (id == temp + 1)
+            {
+                temp = id;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return temp;
+    }
+    
+    private int GetCommIDs()
+    {
+        List<int> ids = new List<int>();
+        SQLiteCommand command = new SQLiteCommand("SELECT * FROM COMMUNITY", _connection);
+        SQLiteDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            ids.Add(reader.GetInt32(0));
+        }
+        int temp = 0;
+        if (ids.Count == 0)
+        {
+            throw new Exception("No users found in the database.");
+        } 
+        foreach (int id in ids)
+        {
+            if (id == temp + 1)
+            {
+                temp = id;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return temp;
+    }
+    
+    public int GetPostIDs()
+    {
+        List<int> ids = new List<int>();
+        SQLiteCommand command = new SQLiteCommand("SELECT * FROM POSTS", _connection);
+        SQLiteDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            ids.Add(reader.GetInt32(0));
+        }
+        int temp = 100;
+        if (ids.Count == 0)
+        {
+            throw new Exception("No users found in the database.");
+        } 
+        foreach (int id in ids)
+        {
+            if (id == temp + 1)
+            {
+                temp = id;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return temp;
+    }
 
 }

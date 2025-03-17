@@ -4,7 +4,10 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        
         Database db = new Database();
+        
+        Console.WriteLine(db.GetPostIDs());
         //Console.WriteLine(db.RegisterUser("diddy69@party.cum", "TheGreatDiddler", "6969696"));
         // fail
         Console.WriteLine(db.LoginUser("TheGreatDiddler", "123456"));
@@ -21,6 +24,8 @@ public class Program
         
         // sucsess
         Console.WriteLine(db.GetUser(1));
+        
+        Console.WriteLine(db.CreateCommunity("man i love Diddy", "cpp-p,c#","we love diddy", null));
         
 
         /*
