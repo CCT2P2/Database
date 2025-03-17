@@ -52,30 +52,30 @@ public class Program
         // app.Run();
     }
 
-    public static void User_test(Database db)
+    public static void User_test(Database db) // [passed]
     {
-        // register test
-        int? id = db.RegisterUser("diddy69@party.cum", "TheGreatDiddler", "6969696");
-        Console.WriteLine($"User registered id: {id}");
+        // register test [passed]
+        // int? id = db.RegisterUser("diddy69@party.cum", "TheGreatDiddler", "6969696");
+        // Console.WriteLine($"User registered id: {id}");
 
-        // login fail test (wrong pwd)
-        //Console.WriteLine(db.LoginUser("TheGreatDiddler", "123456"));
+        // login fail test (wrong pwd) [passed]
+        // Console.WriteLine($"return: {db.LoginUser("TheGreatDiddler", "123456")}");
 
-        // login sucsess test
-        id = db.LoginUser("TheGreatDiddler", "6969696");
-        Console.WriteLine($"User logged in id: {id}");
+        // login sucsess test [passed]
+        // int? id = db.LoginUser("TheGreatDiddler", "6969696");
+        // Console.WriteLine($"User logged in id: {id}");
 
-        // login fail test (wrong user)
-        //Console.WriteLine(db.LoginUser("Skibidi", "bobbobS"));
+        // login fail test (wrong user) [passed]
+        // Console.WriteLine($"return: {db.LoginUser("Skibidi", "bobbobS")}");
 
-        // fetch user test fail (wrong id)
+        // fetch user test fail (wrong id) [passed]
         //Console.WriteLine(db.GetUser(0));
 
 
-        // fetch user test success
+        // fetch user test success [passed]
         //Console.WriteLine(db.GetUser(1));
 
-        //user deletion test
-        Console.WriteLine($"User deleted code: {db.DeleteUser(id)}");
+        //user deletion test [passed]
+        // Console.WriteLine($"User deleted code: {db.DeleteUser(id)}");
     }
 }

@@ -131,9 +131,9 @@ public class Database
         {
             command.ExecuteNonQuery();
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            Console.WriteLine(ex.Message);
+            Console.WriteLine(e.Message);
         }
         return 0;
     }
