@@ -5,7 +5,7 @@ public class Program
     public static void Main(string[] args)
     {
         Database db = new Database();
-        Console.WriteLine(db.RegisterUser("diddy69@party.cum", "TheGreatDiddler", "6969696"));
+        //Console.WriteLine(db.RegisterUser("diddy69@party.cum", "TheGreatDiddler", "6969696"));
         // fail
         Console.WriteLine(db.LoginUser("TheGreatDiddler", "123456"));
 
@@ -15,6 +15,13 @@ public class Program
         // fail (but different) no user found
         Console.WriteLine(db.LoginUser("Skibidi", "bobbobS"));
 
+        // fail
+        Console.WriteLine(db.GetUser(0));
+        
+        
+        // sucsess
+        Console.WriteLine(db.GetUser(1));
+        
 
         /*
         var builder = WebApplication.CreateBuilder(args);

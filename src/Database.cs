@@ -61,15 +61,28 @@ public class Database
         return null;
     }
 
-    public string GetUser(int id)
+    public string? GetUser(int id)
     {
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM USER WHERE USER_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
 
+        SQLiteDataReader reader = command.ExecuteReader();
+        if (reader.Read())
+        {
+            int ID = reader.GetInt16(0); 
+            string email = reader.GetString(1);
+            string username = reader.GetString(2);
+            string? img_path = reader.GetString(4);//
+            string? post_IDS = reader.GetString(5);//
+            string? COMM_IDS = reader.GetString(6);//
+            string? tags = reader.GetString(8);//
+            bool admin = reader.GetBoolean(7);
 
-
-        return "peepeepoopoo";
+            return $"{{USER_ID: {ID}EMAIL: {email}, USERNAME: {username}, IMG_PATH: {img_path}, POST_IDS: {post_IDS}, COMM_IDS: {COMM_IDS}, tags: {tags}, admin: {admin} }}";
+        }
+        return null;
     }
+
     public void GetPost(int id)
     {
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM POSTS", _connection);

@@ -1279,19 +1279,19 @@
     ]
   },
   "packageFolders": {
-    "/home/slindau/.nuget/packages/": {}
+    "C:\\Users\\burhe\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/slindau/Documents/P2/Database/database.csproj",
+      "projectUniqueName": "C:\\Users\\burhe\\RiderProjects\\p2\\Database\\database.csproj",
       "projectName": "database",
-      "projectPath": "/home/slindau/Documents/P2/Database/database.csproj",
-      "packagesPath": "/home/slindau/.nuget/packages/",
-      "outputPath": "/home/slindau/Documents/P2/Database/obj/",
+      "projectPath": "C:\\Users\\burhe\\RiderProjects\\p2\\Database\\database.csproj",
+      "packagesPath": "C:\\Users\\burhe\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\burhe\\RiderProjects\\p2\\Database\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/slindau/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\burhe\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -1313,7 +1313,7 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "direct"
+        "auditMode": "all"
       },
       "SdkAnalysisLevel": "9.0.100"
     },
@@ -1341,12 +1341,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[9.0.3, 9.0.3]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -1355,8 +1349,40 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.104/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Users\\burhe\\.dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.Data.SqlClient' 4.8.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-8g2p-5pqh-5jmc",
+      "libraryId": "System.Data.SqlClient",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.Data.SqlClient' 4.8.1 has a known high severity vulnerability, https://github.com/advisories/GHSA-98g6-xh36-x2p7",
+      "libraryId": "System.Data.SqlClient",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1904",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.Drawing.Common' 4.7.0 has a known critical severity vulnerability, https://github.com/advisories/GHSA-rxg9-xrhp-64gj",
+      "libraryId": "System.Drawing.Common",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    }
+  ]
 }
