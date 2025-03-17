@@ -1,8 +1,8 @@
-﻿@database_HostAddress = http://localhost:5150
 
+@database_HostAddress = http://localhost:9012
 
-### login part 1
-POST {{database_HostAddress}}/auth/login
+### Login
+POST {{database_HostAddress}}/api/auth/login
 Content-Type: application/json
 
 {
@@ -10,12 +10,8 @@ Content-Type: application/json
   "password": "string"
 }
 
-### login part 2
-GET {{database_HostAddress}}/auth/login
-Accept: application/json
-
-### register part 1
-POST {{database_HostAddress}}/auth/register
+### Register
+POST {{database_HostAddress}}/api/auth/register
 Content-Type: application/json
 
 {
@@ -24,29 +20,34 @@ Content-Type: application/json
   "password": "string"
 }
 
-### register part 2
-GET {{database_HostAddress}}/auth/register
+### Get User Profile
+GET {{database_HostAddress}}/api/user/profile/{user_id}
 Accept: application/json
 
-### GET user
-GET {{database_HostAddress}}/user/profile/{user_id}
+### Delete User Account
+DELETE {{database_HostAddress}}/api/user/remove/{user_id}
 Accept: application/json
 
-### DELETE USER ACCOUNT
-DELETE {{database_HostAddress}}/user/remove/{user_id}
-Accept: Digest {$returncode}
-
-### UPDATE user
-POST {{database_HostAddress}}/user/update/user/{user_id}
+### Update User Profile (user)
+PUT {{database_HostAddress}}/api/user/update/user/{user_id}
 Content-Type: application/json
 
 {
   "img_path": "string",
-  "password": "string",
+  "password": "string"
 }
 
+### Update User Profile (backend)
+PUT {{database_HostAddress}}/api/user/update/backend/{user_id}
+Content-Type: application/json
 
-###  Create community p. 2
+{
+  "communities": [1, 2],
+  "POST_IDs": [3, 4],
+  "TAGS": [5, 6]
+}
+
+### Create Community
 POST {{database_HostAddress}}/api/community/create
 Content-Type: application/json
 
@@ -54,28 +55,14 @@ Content-Type: application/json
   "name": "string",
   "description": "string",
   "img_path": "string",
-  "tags": ["int"]
+  "tags": [1, 2]
 }
 
-###  Create community p. 2
-GET {{database_HostAddress}}/api/community/list
+### Get Community
+GET {{database_HostAddress}}/api/community/details/{community_id}
 Accept: application/json
 
-### Get community
-POST {{database_HostAddress}}/api/community/details/{community_id}
-Content-Type: application/json
-
-{
-  "id": "INT",
-  "name": "string",
-  "description": "string",
-  "img_path": "string",
-  "member_count": "int",
-  "tags": ["INT"],
-  "post_ids": ["INT"]
-}
-
-### Update community
+### Update Community (user)
 PUT {{database_HostAddress}}/api/community/update/details/{community_id}
 Content-Type: application/json
 
@@ -84,25 +71,18 @@ Content-Type: application/json
   "img_path": "string"
 }
 
-### Update community p. 2
-PUT {{database_HostAddress}}/api/community/verify/{community_id}
-Accept: Digest {$returncode}
-
-### Update community member p. 1
-PUT {{database_HostAddress}}/api/community/members/update/members/{community_id}
+### Update Community (backend)
+PUT {{database_HostAddress}}/api/community/update/backend/{community_id}
 Content-Type: application/json
 
 {
-  "member_count": "int"
+  "member_count": 100,
+  "TAGS": [1, 2],
+  "POST_IDs": [3, 4]
 }
 
-### delete community
+### Delete Community
 DELETE {{database_HostAddress}}/api/community/remove/{community_id}
-Accept: Digest {$returncode}
-
-
-### Update community member p. 2
-PUT {{database_HostAddress}}/api/community/members/verify/{community_id}
 Accept: application/json
 
 ### Create Post
@@ -112,18 +92,18 @@ Content-Type: application/json
 {
   "title": "string",
   "main_text": "string",
-  "auth_id": "INT",
-  "com_id": "INT",
-  "post_id_ref": "INT",
-  "comment_flag": "boolean"
+  "auth_id": 1,
+  "com_id": 2,
+  "post_id_ref": 0,
+  "comment_flag": false
 }
 
-### GET post
+### Get Post
 GET {{database_HostAddress}}/api/post/view/{post_id}
 Accept: application/json
 
-### Update post
-PUT {{database_HostAddress}}/api/post/update/{post_id}
+### Update Post (user)
+PUT {{database_HostAddress}}/api/post/update/user/{post_id}
 Content-Type: application/json
 
 {
@@ -131,36 +111,46 @@ Content-Type: application/json
   "main_text": "string"
 }
 
-### Delete post
+### Update Post (backend)
+PUT {{database_HostAddress}}/api/post/update/backend/{post_id}
+Content-Type: application/json
+
+{
+  "COMMENT_CNT": 5,
+  "LIKES": 10,
+  "DISLIKES": 2,
+  "COMMENTS": [6, 7]
+}
+
+### Delete Post
 DELETE {{database_HostAddress}}/api/post/remove/{post_id}
-Accept: Digest {$returncode}
+Accept: application/json
 
-
-### Like / Dislike
+### Like / Dislike Post
 PUT {{database_HostAddress}}/api/post/vote/{post_id}
 Content-Type: application/json
 
 {
-  "likes": "int",
-  "dislikes": "int"
+  "likes": 12,
+  "dislikes": 3
 }
 
-### Comments
+### Add Comments to Post
 PUT {{database_HostAddress}}/api/post/comments/{post_id}
 Content-Type: application/json
 
 {
-  "Comments": "INT[]"
+  "Comments": [8, 9]
 }
 
 ### Search Posts
-GET {{database_HostAddress}}/api/post/search?q=example
+GET {{database_HostAddress}}/api/search/posts?q=example
 Accept: application/json
 
 ### Search Communities
-GET {{database_HostAddress}}/api/community/search?q=example
+GET {{database_HostAddress}}/api/search/communities?q=example
 Accept: application/json
 
 ### Search Users
-GET {{database_HostAddress}}/api/users/search?q=example
+GET {{database_HostAddress}}/api/search/users?q=example
 Accept: application/json
