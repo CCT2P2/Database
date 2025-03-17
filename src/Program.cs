@@ -72,14 +72,15 @@ public class Program
         //Console.WriteLine(db.GetUser(0));
 
 
-        Console.WriteLine(db.DeleteUser(12));
+        // delete user test [passed]
+        // Console.WriteLine(db.DeleteUser(12));
 
-        Console.WriteLine(db.CreatePost("man shitter","i love The Great Diddler he do be diddleing me",1,3,null,false));
+        Console.WriteLine(db.CreatePost("man shitter", "i love The Great Diddler he do be diddleing me", 1, 3, null, false));
         Console.WriteLine(db.GetPost(106));
-        Console.WriteLine(db.updatePostUser(106,"shitter man (Gone SEXUAL!!!!!??!?!!?!?)", "i love The Great Diddler he do be diddleing me in my little bumbum"));
-        Console.WriteLine(db.updatePostBackend(106, 100324, "1,2,3,4",11345234,69420));
+        Console.WriteLine(db.updatePostUser(106, "shitter man (Gone SEXUAL!!!!!??!?!!?!?)", "i love The Great Diddler he do be diddleing me in my little bumbum"));
+        Console.WriteLine(db.updatePostBackend(106, 100324, "1,2,3,4", 11345234, 69420));
         Console.WriteLine(db.GetPost(106));
-        
+
         Console.WriteLine(db.DeletePost(106));
     }
 }
