@@ -69,5 +69,7 @@ public class Program
 
         // sucsess
         Console.WriteLine(db.GetUser(1));
+
+        Console.WriteLine(db.DeleteUser(12));
     }
 }
