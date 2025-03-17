@@ -40,7 +40,7 @@ public class Database
             }
             else
             {
-                return -1;
+                return 401;
             }
         }
 
@@ -50,24 +50,25 @@ public class Database
 
     public int? RegisterUser(string email, string username, string password)
     //Registered user does not use first available ID, meaning if user.id 1 deletes account, user.id 1 will never be used again
-    //RegisterUser fails returns the ID of the newly registered user
     {
         if (LoginUser(username, "dummy") != null)
         {
             return -1;
         }
+        Int32 id = GetUserIDs();
         SQLiteCommand command = new SQLiteCommand("INSERT INTO USER (EMAIL, USER_NAME, PASSWORD) VALUES (@email, @username, @password)", _connection);
         command.Parameters.AddWithValue("@email", email);
         command.Parameters.AddWithValue("@username", username);
         command.Parameters.AddWithValue("@password", password);
 
-
-        SQLiteDataReader reader = command.ExecuteReader();
-        if (reader.Read())
+        if (command.ExecuteNonQuery() > 0)
         {
-            return reader.GetInt16(0);
+            return id;
         }
-        return null;
+        else
+        {
+            return null;
+        }
     }
 
     public string? GetUser(int id)
@@ -91,7 +92,7 @@ public class Database
         return null;
     }
 
-    public int DeleteUser(int id)
+    public int? DeleteUser(int? id)
     {
         SQLiteCommand command = new SQLiteCommand("DELETE FROM USER WHERE USER_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
@@ -100,7 +101,7 @@ public class Database
         {
             return 200;
         }
-        return 207;
+        return 204;
     }
 
     public int UpdateUser(int id, string img_path, string password)
@@ -114,7 +115,7 @@ public class Database
         {
             return 200;
         }
-        return 207;
+        return 204;
     }
 
     public int CreateCommunity(string name, string tags, string description, string? imagePath)
@@ -129,9 +130,9 @@ public class Database
         {
             command.ExecuteNonQuery();
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            Console.WriteLine(ex.Message);
+            Console.WriteLine(e.Message);
         }
         return 0;
     }
@@ -257,7 +258,7 @@ public class Database
         if (ids.Count == 0)
         {
             throw new Exception("No users found in the database.");
-        } 
+        }
         foreach (int id in ids)
         {
             if (id == temp + 1)
@@ -269,9 +270,9 @@ public class Database
                 break;
             }
         }
-        return temp+1;
+        return temp + 1;
     }
-    
+
     private int GetCommIDs()
     {
         List<int> ids = new List<int>();
@@ -285,7 +286,7 @@ public class Database
         if (ids.Count == 0)
         {
             throw new Exception("No users found in the database.");
-        } 
+        }
         foreach (int id in ids)
         {
             if (id == temp + 1)
@@ -297,9 +298,9 @@ public class Database
                 break;
             }
         }
-        return temp+1;
+        return temp + 1;
     }
-    
+
     public int GetPostIDs()
     {
         List<int> ids = new List<int>();
@@ -313,7 +314,7 @@ public class Database
         if (ids.Count == 0)
         {
             throw new Exception("No users found in the database.");
-        } 
+        }
         foreach (int id in ids)
         {
             if (id == temp + 1)
@@ -325,7 +326,7 @@ public class Database
                 break;
             }
         }
-        return temp+1;
+        return temp + 1;
     }
 
 }
