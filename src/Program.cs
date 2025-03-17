@@ -73,7 +73,8 @@ public class Program
         //Console.WriteLine(db.GetUser(0));
 
 
-        Console.WriteLine(db.DeleteUser(12));
+        // delete user test [passed]
+        // Console.WriteLine(db.DeleteUser(12));
 
       
     }
