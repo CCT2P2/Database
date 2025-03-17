@@ -359,6 +359,18 @@ public class Database
 
         return "204";
     }
+    
+    public int DeleteCommunity(int id)
+    {
+        SQLiteCommand command = new SQLiteCommand("DELETE FROM COMMUNITY WHERE POST_ID = @id", _connection);
+        command.Parameters.AddWithValue("@id", id);
+
+        if (command.ExecuteNonQuery() > 0)
+        {
+            return 200;
+        }
+        return 204;
+    }
 
 
 }
