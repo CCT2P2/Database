@@ -5,23 +5,7 @@ public class Program
     public static void Main(string[] args)
     {
         Database db = new Database();
-        Console.WriteLine(db.RegisterUser("diddy69@party.cum", "TheGreatDiddler", "6969696"));
-        // fail
-        Console.WriteLine(db.LoginUser("TheGreatDiddler", "123456"));
-
-        // sucsess
-        Console.WriteLine(db.LoginUser("TheGreatDiddler", "6969696"));
-
-        // fail (but different) no user found
-        Console.WriteLine(db.LoginUser("Skibidi", "bobbobS"));
-
-        // fail
-        Console.WriteLine(db.GetUser(0));
-
-
-        // sucsess
-        Console.WriteLine(db.GetUser(1));
-
+        User_test(db);
 
         /*
         var builder = WebApplication.CreateBuilder(args);
@@ -65,5 +49,25 @@ public class Program
             .WithName("GetWeatherForecast"); */
 
         // app.Run();
+    }
+
+    public static void User_test(Database db)
+    {
+        Console.WriteLine(db.RegisterUser("diddy69@party.cum", "TheGreatDiddler", "6969696"));
+        // fail
+        Console.WriteLine(db.LoginUser("TheGreatDiddler", "123456"));
+
+        // sucsess
+        Console.WriteLine(db.LoginUser("TheGreatDiddler", "6969696"));
+
+        // fail (but different) no user found
+        Console.WriteLine(db.LoginUser("Skibidi", "bobbobS"));
+
+        // fail
+        Console.WriteLine(db.GetUser(0));
+
+
+        // sucsess
+        Console.WriteLine(db.GetUser(1));
     }
 }
