@@ -7,6 +7,7 @@ public class Program
 
         Database db = new Database();
         User_test(db);
+        Post_test(db);
 
         /*
         var builder = WebApplication.CreateBuilder(args);
@@ -74,12 +75,26 @@ public class Program
 
         Console.WriteLine(db.DeleteUser(12));
 
-        Console.WriteLine(db.CreatePost("man shitter","i love The Great Diddler he do be diddleing me",1,3,null,false));
-        Console.WriteLine(db.GetPost(106));
-        Console.WriteLine(db.updatePostUser(106,"shitter man (Gone SEXUAL!!!!!??!?!!?!?)", "i love The Great Diddler he do be diddleing me in my little bumbum"));
-        Console.WriteLine(db.updatePostBackend(106, 100324, "1,2,3,4",11345234,69420));
-        Console.WriteLine(db.GetPost(106));
+      
+    }
+
+    public static void Post_test(Database db)
+    {
+        // Create Post test succeded  [passed]
+        Console.WriteLine($"test Create Post: {db.CreatePost("man shitter","i love The Great Diddler he do be diddleing me",1,3,null,false)}");
         
-        Console.WriteLine(db.DeletePost(106));
+        // fetch Post test succeded [passed]
+        Console.WriteLine($"fetch Post test: {db.GetPost(106)}");
+        
+        
+        // update Post tests succeded [passed]
+        Console.WriteLine($"update Post Test (User): {db.updatePostUser(106,"shitter man (Gone SEXUAL!!!!!??!?!!?!?)", "i love The Great Diddler he do be diddleing me in my little bumbum")}");
+        Console.WriteLine($"update Post Test (Backend): {db.updatePostBackend(106, 100324, "1,2,3,4",11345234,69420)}");
+        
+        // fetch Post test to see if the update Post fucktions work [passed]
+        Console.WriteLine($"fetch Post after update tests to see if they worked: {db.GetPost(106)}");
+        
+        // Delete Post tests succeded [passed]
+        Console.WriteLine($"Delete User test: {db.DeletePost(106)}");
     }
 }

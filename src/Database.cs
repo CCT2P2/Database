@@ -189,7 +189,7 @@ public class Database
         command.Parameters.AddWithValue("@main", main);
         command.Parameters.AddWithValue("@title", title);
 
-        if (command.ExecuteNonQuery() < 0)
+        if (command.ExecuteNonQuery() > 0)
         {
             return 200;
         }
@@ -205,7 +205,7 @@ public class Database
         command.Parameters.AddWithValue("@dislikes", dislikes);
         command.Parameters.AddWithValue("@comments", comments);
 
-        if (command.ExecuteNonQuery() < 0)
+        if (command.ExecuteNonQuery() > 0)
         {
             return 200;
         }
