@@ -247,7 +247,6 @@ public class Database
             return id; // Return the generated post ID
         }
 
-
         return 500; // Return 500 if the insert fails
     }
 
@@ -330,6 +329,7 @@ public class Database
             if (id == temp + 1)
             {
                 temp = id;
+
             }
             else
             {
@@ -341,7 +341,7 @@ public class Database
 
     public string GetCommunity(int id)
     {
-        SQLiteCommand command = new SQLiteCommand("SELECT * FROM COMMUNITY WHERE ID = @id", _connection);
+        SQLiteCommand command = new SQLiteCommand("SELECT * FROM COMMUNITY WHERE COMMUNITY_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
         SQLiteDataReader reader = command.ExecuteReader();
 
@@ -357,9 +357,9 @@ public class Database
             return ($"ID: {id}, community name: {communityName}, Community description: {communityDescription}, Image Path: {img_path}, Member count: {memberCount}, Tags: {tags}, Post IDS: {post_IDS}");
         }
 
-        return "204";
+        return null;
     }
-    
+
     public int DeleteCommunity(int id)
     {
         SQLiteCommand command = new SQLiteCommand("DELETE FROM COMMUNITY WHERE POST_ID = @id", _connection);
