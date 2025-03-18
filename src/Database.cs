@@ -360,7 +360,7 @@ public class Database
         return null;
     }
 
-    public int UpdateCommunityUser(int id, string community_name, string community_description, string img_path, string tags)
+    public int UpdateCommunity_User(int id, string community_name, string community_description, string img_path, string tags)
     {
         SQLiteCommand command =
             new SQLiteCommand("UPDATE COMMUNITY SET COMMUNITY_NAME = @community_name, COMMUNITY_DESCRIPTION = @community_description, IMAGE_PATH = @img_path, TAGS = @tags WHERE COMMUNITY_ID = @id",
@@ -389,7 +389,7 @@ public class Database
         return 204;
     }
 
-    public int UpdateCommunitybackend(int id, int memberCount, string tags, string post_id, )
+    public int UpdateCommunity_Backend(int id, int memberCount, string tags, string post_id )
     {
         SQLiteCommand command =
             new SQLiteCommand("UPDATE COMMUNITY SET MEMBER_CNT = @memberCount, TAGS = @tags, POST_ID= @post_id, WHERE COMMUNITY_ID = @id",_connection);
@@ -404,6 +404,26 @@ public class Database
         }
             return 204;
     }
+
+    public int LikeDislike_Count(int post_id, int like_count, int dislike_count)
+    {
+        SQLiteCommand command = new SQLiteCommand("UPDATE POST SET LIKE_COUNT =@like, DISLIKE_COUNT =@dislike, WHERE POST_ID= @post_id",_connection);
+        
+      
+        command.Parameters.AddWithValue("@like", like_count);
+        command.Parameters.AddWithValue("@dislike", dislike_count);
+        command.Parameters.AddWithValue("@post_id", post_id);       
+        
+        
+        if (command.ExecuteNonQuery() > 0)
+        {
+            return 200;
+        }
+        return 204;
+    }
+    
+  
+    
 }
 
 
