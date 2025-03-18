@@ -362,7 +362,7 @@ public class Database
 
     public int DeleteCommunity(int id)
     {
-        SQLiteCommand command = new SQLiteCommand("DELETE FROM COMMUNITY WHERE POST_ID = @id", _connection);
+        SQLiteCommand command = new SQLiteCommand("DELETE FROM COMMUNITY WHERE COMMUNITY_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
 
         if (command.ExecuteNonQuery() > 0)
@@ -371,6 +371,4 @@ public class Database
         }
         return 204;
     }
-
-
 }
