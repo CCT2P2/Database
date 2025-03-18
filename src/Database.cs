@@ -360,7 +360,7 @@ public class Database
         return null;
     }
 
-    public int UpdateCommunity(int id, string community_name, string community_description, string img_path, string tags)
+    public int UpdateCommunityUser(int id, string community_name, string community_description, string img_path, string tags)
     {
         SQLiteCommand command =
             new SQLiteCommand("UPDATE COMMUNITY SET COMMUNITY_NAME = @community_name, COMMUNITY_DESCRIPTION = @community_description, IMAGE_PATH = @img_path, TAGS = @tags WHERE COMMUNITY_ID = @id",
@@ -388,4 +388,22 @@ public class Database
         }
         return 204;
     }
+
+    public int UpdateCommunitybackend(int id, int memberCount, string tags, string post_id, )
+    {
+        SQLiteCommand command =
+            new SQLiteCommand("UPDATE COMMUNITY SET MEMBER_CNT = @memberCount, TAGS = @tags, POST_ID= @post_id, WHERE COMMUNITY_ID = @id",_connection);
+        command.Parameters.AddWithValue("@memberCount", memberCount);
+        command.Parameters.AddWithValue("@tags", tags);
+        command.Parameters.AddWithValue("@post_id", post_id);
+
+
+        if (command.ExecuteNonQuery() > 0)
+        {
+            return 200;
+        }
+            return 204;
+    }
 }
+
+
