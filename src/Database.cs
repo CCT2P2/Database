@@ -108,7 +108,7 @@ public class Database
     public int UpdateUser(int id, string img_path, string password)
     {
         SQLiteCommand command =
-            new SQLiteCommand("UPDATE USER SET PASSWORD = @password, IMG_PATH = @img_path WHERE USER_ID = @id",
+            new SQLiteCommand("UPDATE USER SET PASSWORD = @password, IMAGE_PATH = @img_path WHERE USER_ID = @id",
                 _connection);
         command.Parameters.AddWithValue("@id", id);
         command.Parameters.AddWithValue("@password", password);
@@ -360,6 +360,23 @@ public class Database
         return null;
     }
 
+    public int UpdateCommunity(int id, string community_name, string community_description, string img_path, string tags)
+    {
+        SQLiteCommand command =
+            new SQLiteCommand("UPDATE COMMUNITY SET COMMUNITY_NAME = @community_name, COMMUNITY_DESCRIPTION = @community_description, IMAGE_PATH = @img_path, TAGS = @tags WHERE COMMUNITY_ID = @id",
+                _connection);
+        command.Parameters.AddWithValue("@id", id);
+        command.Parameters.AddWithValue("@community_name", community_name);
+        command.Parameters.AddWithValue("@community_description", community_description);
+        command.Parameters.AddWithValue("@img_path", img_path);
+        command.Parameters.AddWithValue("@tags", tags);
+
+        if (command.ExecuteNonQuery() > 0)
+        {
+            return 200;
+        }
+        return 204;
+    }
     public int DeleteCommunity(int id)
     {
         SQLiteCommand command = new SQLiteCommand("DELETE FROM COMMUNITY WHERE COMMUNITY_ID = @id", _connection);
