@@ -121,29 +121,6 @@ public class Database
         return 204;
     }
 
-    public int CreateCommunity(string name, string tags, string description, string? imagePath)
-    {
-        SQLiteCommand command =
-            new SQLiteCommand(
-                "INSERT INTO COMMUNITY (COMMUNITY_NAME, TAGS, COMMUNITY_DESCRIPTION, IMAGE_PATH) VALUES (@name, @tags, @description, @imagePath)",
-                _connection);
-        command.Parameters.AddWithValue("@name", name);
-        command.Parameters.AddWithValue("@tags", tags);
-        command.Parameters.AddWithValue("@description", description);
-        command.Parameters.AddWithValue("@imagePath", imagePath);
-
-        try
-        {
-            command.ExecuteNonQuery();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
-
-        return 200;
-    }
-
     public int DeletePost(int id)
     {
         SQLiteCommand command = new SQLiteCommand("DELETE FROM POSTS WHERE POST_ID = @id", _connection);
@@ -249,41 +226,39 @@ public class Database
 
         return 500; // Return 500 if the insert fails
     }
+    public int CreateCommunity(string communityName, string communityDescription, string imagePath, int memberCount, string tags, int? postIds)
+    {
+        int id = GetCommIDs(); // Ensure this generates a unique ID
+
+        SQLiteCommand command =
+            new SQLiteCommand(
+            "INSERT INTO COMMUNITY (COMMUNITY_ID, COMMUNITY_NAME, COMMUNITY_DESCRIPTION, IMAGE_PATH, MEMBER_COUNT, TAGS, POST_IDs) VALUES (@id, @communityName, @communityDescription, @imagePath, @memberCount, @tags, @postIds)",
+            _connection);
+
+        command.Parameters.AddWithValue("@id", id);
+        command.Parameters.AddWithValue("@communityName", communityName);
+        command.Parameters.AddWithValue("@communityDescription", communityDescription);
+        command.Parameters.AddWithValue("@imagePath", imagePath);
+        command.Parameters.AddWithValue("@memberCount", memberCount);
+        command.Parameters.AddWithValue("@tags", tags);
+
+        // Correct handling of nullable values
+        command.Parameters.AddWithValue("@postIds", postIds.HasValue ? (object)postIds.Value : DBNull.Value);
+
+        int rowsAffected = command.ExecuteNonQuery();
+        if (rowsAffected > 0)
+        {
+            return id; // Return the generated post ID
+        }
+
+        return 500; // Return 500 if the insert fails
+    }
 
 
     private int GetUserIDs()
     {
         List<int> ids = new List<int>();
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM USER", _connection);
-        SQLiteDataReader reader = command.ExecuteReader();
-        while (reader.Read())
-        {
-            ids.Add(reader.GetInt32(0));
-        }
-
-        int temp = 0;
-        if (ids.Count == 0)
-        {
-            throw new Exception("No users found in the database.");
-        }
-        foreach (int id in ids)
-        {
-            if (id == temp + 1)
-            {
-                temp = id;
-            }
-            else
-            {
-                break;
-            }
-        }
-        return temp + 1;
-    }
-
-    private int GetCommIDs()
-    {
-        List<int> ids = new List<int>();
-        SQLiteCommand command = new SQLiteCommand("SELECT * FROM COMMUNITY", _connection);
         SQLiteDataReader reader = command.ExecuteReader();
         while (reader.Read())
         {
@@ -330,6 +305,35 @@ public class Database
             {
                 temp = id;
 
+            }
+            else
+            {
+                break;
+            }
+        }
+        return temp + 1;
+    }
+
+    private int GetCommIDs()
+    {
+        List<int> ids = new List<int>();
+        SQLiteCommand command = new SQLiteCommand("SELECT * FROM COMMUNITY", _connection);
+        SQLiteDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            ids.Add(reader.GetInt32(0));
+        }
+
+        int temp = 0;
+        if (ids.Count == 0)
+        {
+            throw new Exception("No communities found in the database.");
+        }
+        foreach (int id in ids)
+        {
+            if (id == temp + 1)
+            {
+                temp = id;
             }
             else
             {
