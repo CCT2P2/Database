@@ -180,7 +180,7 @@ public class Database
         return 204;
     }
 
-    public int updatePostBackend(int post_id, int comment_count, string comments, int likes, int dislikes)
+    public int updatePostBackend(int post_id, int comment_count, string comments, int likes, int dislikes) //potential deletion if proposal 2.B goes through
     {
         SQLiteCommand command = new SQLiteCommand("UPDATE POSTS SET COMMENT_CNT = @comment_count, LIKES = @likes, DISLIKES = @dislikes, COMMENTS = @comments  WHERE POST_ID = @id LIMIT 1", _connection);
         command.Parameters.AddWithValue("@id", post_id);
@@ -393,10 +393,10 @@ public class Database
         return 204;
     }
 
-    public int UpdateCommunity_Backend(int id, int memberCount, string tags, string post_id )
+    public int UpdateCommunity_Backend(int id, int memberCount, string tags, string post_id) //potential deletion if proposal 2.B goes through
     {
         SQLiteCommand command =
-            new SQLiteCommand("UPDATE COMMUNITY SET MEMBER_CNT = @memberCount, TAGS = @tags, POST_ID= @post_id, WHERE COMMUNITY_ID = @id",_connection);
+            new SQLiteCommand("UPDATE COMMUNITY SET MEMBER_CNT = @memberCount, TAGS = @tags, POST_ID= @post_id, WHERE COMMUNITY_ID = @id", _connection);
         command.Parameters.AddWithValue("@memberCount", memberCount);
         command.Parameters.AddWithValue("@tags", tags);
         command.Parameters.AddWithValue("@post_id", post_id);
@@ -406,28 +406,26 @@ public class Database
         {
             return 200;
         }
-            return 204;
+        return 204;
     }
 
     public int LikeDislike_Count(int post_id, int like_count, int dislike_count)
     {
-        SQLiteCommand command = new SQLiteCommand("UPDATE POST SET LIKE_COUNT =@like, DISLIKE_COUNT =@dislike, WHERE POST_ID= @post_id",_connection);
-        
-      
+        SQLiteCommand command = new SQLiteCommand("UPDATE POST SET LIKE_COUNT =@like, DISLIKE_COUNT =@dislike, WHERE POST_ID= @post_id", _connection);
+
+
         command.Parameters.AddWithValue("@like", like_count);
         command.Parameters.AddWithValue("@dislike", dislike_count);
-        command.Parameters.AddWithValue("@post_id", post_id);       
-        
-        
+        command.Parameters.AddWithValue("@post_id", post_id);
+
+
         if (command.ExecuteNonQuery() > 0)
         {
             return 200;
         }
         return 204;
     }
-    
-  
-    
+
+
+
 }
-
-
