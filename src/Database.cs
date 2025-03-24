@@ -267,7 +267,7 @@ public class Database
 
         SQLiteCommand command =
             new SQLiteCommand(
-            "INSERT INTO COMMUNITY (COMMUNITY_ID, COMMUNITY_NAME, COMMUNITY_DESCRIPTION, IMAGE_PATH, MEMBER_COUNT, TAGS, POST_IDs) VALUES (@id, @communityName, @communityDescription, @imagePath, @memberCount, @tags, @postIds)",
+            "INSERT INTO COMMUNITY (COMMUNITY_ID, COMMUNITY_NAME, COMMUNITY_DESCRIPTION, IMAGE_PATH, MEMBER_CNT, TAGS, POST_IDs) VALUES (@id, @communityName, @communityDescription, @imagePath, @memberCount, @tags, @postIds)",
             _connection);
 
         command.Parameters.AddWithValue("@id", id);
@@ -350,10 +350,11 @@ public class Database
         CheckConnection();
 
         SQLiteCommand command =
-            new SQLiteCommand("UPDATE COMMUNITY SET MEMBER_CNT = @memberCount, TAGS = @tags, POST_ID= @post_id, WHERE COMMUNITY_ID = @id", _connection);
+            new SQLiteCommand("UPDATE COMMUNITY SET MEMBER_CNT = @memberCount, TAGS = @tags, POST_IDs= @post_id WHERE COMMUNITY_ID = @id", _connection);
         command.Parameters.AddWithValue("@memberCount", memberCount);
         command.Parameters.AddWithValue("@tags", tags);
         command.Parameters.AddWithValue("@post_id", post_id);
+        command.Parameters.AddWithValue("@id", id);
 
 
         if (command.ExecuteNonQuery() > 0)

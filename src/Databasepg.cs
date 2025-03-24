@@ -229,7 +229,7 @@ public class Databasepg
 
         NpgsqlCommand command =
             new NpgsqlCommand(
-            "INSERT INTO COMMUNITY (COMMUNITY_NAME, COMMUNITY_DESCRIPTION, IMAGE_PATH, MEMBER_COUNT, TAGS, POST_IDs) VALUES (@communityName, @communityDescription, @imagePath, @memberCount, @tags, @postIds)",
+            "INSERT INTO COMMUNITY (COMMUNITY_NAME, COMMUNITY_DESCRIPTION, IMAGE_PATH, MEMBER_CNT, TAGS, POST_IDs) VALUES (@communityName, @communityDescription, @imagePath, @memberCount, @tags, @postIds)",
             _connection);
 
 
