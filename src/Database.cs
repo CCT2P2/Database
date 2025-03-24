@@ -13,6 +13,19 @@ public class Database
         OpenConnection();
     }
 
+    private void CheckConnection()
+    {
+        if (_connection.State == ConnectionState.Open)
+        {
+            Console.WriteLine("database is open");
+        }
+        else
+        {
+            Console.WriteLine("connection is closed\nconnecting to database");
+            OpenConnection();
+        }
+    }
+
     private void OpenConnection()
     {
         _connection.Open();
@@ -28,6 +41,8 @@ public class Database
 
     public int? LoginUser(string username, string password)
     {
+        CheckConnection();
+        
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM USER WHERE USER_NAME = @username", _connection);
         command.Parameters.AddWithValue("@username", username);
         SQLiteDataReader reader = command.ExecuteReader();
@@ -51,6 +66,8 @@ public class Database
     public int? RegisterUser(string email, string username, string password)
     //Registered user does not use first available ID, meaning if user.id 1 deletes account, user.id 1 will never be used again
     {
+        CheckConnection();
+        
         if (LoginUser(username, "dummy") != null)
         {
             return 204;
@@ -73,6 +90,8 @@ public class Database
 
     public string? GetUser(int id)
     {
+        CheckConnection();
+        
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM USER WHERE USER_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
 
@@ -95,6 +114,8 @@ public class Database
 
     public int? DeleteUser(int? id)
     {
+        CheckConnection();
+        
         SQLiteCommand command = new SQLiteCommand("DELETE FROM USER WHERE USER_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
 
@@ -107,6 +128,8 @@ public class Database
 
     public int UpdateUser(int id, string img_path, string password)
     {
+        CheckConnection();
+        
         SQLiteCommand command =
             new SQLiteCommand("UPDATE USER SET PASSWORD = @password, IMAGE_PATH = @img_path WHERE USER_ID = @id",
                 _connection);
@@ -123,6 +146,8 @@ public class Database
 
     public int DeletePost(int id)
     {
+        CheckConnection();
+        
         SQLiteCommand command = new SQLiteCommand("DELETE FROM POSTS WHERE POST_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
 
@@ -134,6 +159,8 @@ public class Database
     }
     public string GetPost(int id)
     {
+        CheckConnection();
+        
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM POSTS WHERE POST_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
         SQLiteDataReader reader = command.ExecuteReader();
@@ -168,6 +195,8 @@ public class Database
 
     public int updatePostUser(int post_id, string title, string main)
     {
+        CheckConnection();
+        
         SQLiteCommand command = new SQLiteCommand("UPDATE POSTS SET MAIN = @main, TITLE = @title  WHERE POST_ID = @id LIMIT 1", _connection);
         command.Parameters.AddWithValue("@id", post_id);
         command.Parameters.AddWithValue("@main", main);
@@ -182,6 +211,8 @@ public class Database
 
     public int updatePostBackend(int post_id, int comment_count, string comments, int likes, int dislikes) //potential deletion if proposal 2.B goes through
     {
+        CheckConnection();
+        
         SQLiteCommand command = new SQLiteCommand("UPDATE POSTS SET COMMENT_CNT = @comment_count, LIKES = @likes, DISLIKES = @dislikes, COMMENTS = @comments  WHERE POST_ID = @id LIMIT 1", _connection);
         command.Parameters.AddWithValue("@id", post_id);
         command.Parameters.AddWithValue("@comment_count", comment_count);
@@ -198,6 +229,8 @@ public class Database
 
     public int CreatePost(string name, string main, int authID, int commID, int? postIdRef, bool comment)
     {
+        CheckConnection();
+        
         int id = GetPostIDs(); // Ensure this generates a unique ID
 
         SQLiteCommand command =
@@ -228,6 +261,8 @@ public class Database
     }
     public int CreateCommunity(string communityName, string communityDescription, string imagePath, int memberCount, string tags, int? postIds)
     {
+        CheckConnection();
+        
         int id = GetCommIDs(); // Ensure this generates a unique ID
 
         SQLiteCommand command =
@@ -253,10 +288,104 @@ public class Database
 
         return 500; // Return 500 if the insert fails
     }
+    
+    public string GetCommunity(int id)
+    {
+        CheckConnection();
+        
+        SQLiteCommand command = new SQLiteCommand("SELECT * FROM COMMUNITY WHERE COMMUNITY_ID = @id", _connection);
+        command.Parameters.AddWithValue("@id", id);
+        SQLiteDataReader reader = command.ExecuteReader();
 
+        if (reader.Read())
+        {
+            string communityName = reader.GetString(1);
+            string? communityDescription = reader.GetString(2);
+            string? img_path = reader.GetString(3);
+            int memberCount = reader.GetInt32(4);
+            string tags = reader.GetString(5);
+            string? post_IDS = reader.GetString(6);
+
+            return ($"ID: {id}, community name: {communityName}, Community description: {communityDescription}, Image Path: {img_path}, Member count: {memberCount}, Tags: {tags}, Post IDS: {post_IDS}");
+        }
+
+        return null;
+    }
+
+    public int UpdateCommunity_User(int id, string community_name, string community_description, string img_path, string tags)
+    {
+        CheckConnection();
+        
+        SQLiteCommand command =
+            new SQLiteCommand("UPDATE COMMUNITY SET COMMUNITY_NAME = @community_name, COMMUNITY_DESCRIPTION = @community_description, IMAGE_PATH = @img_path, TAGS = @tags WHERE COMMUNITY_ID = @id",
+                _connection);
+        command.Parameters.AddWithValue("@id", id);
+        command.Parameters.AddWithValue("@community_name", community_name);
+        command.Parameters.AddWithValue("@community_description", community_description);
+        command.Parameters.AddWithValue("@img_path", img_path);
+        command.Parameters.AddWithValue("@tags", tags);
+
+        if (command.ExecuteNonQuery() > 0)
+        {
+            return 200;
+        }
+        return 204;
+    }
+    public int DeleteCommunity(int id)
+    {
+        CheckConnection();
+
+        SQLiteCommand command = new SQLiteCommand("DELETE FROM COMMUNITY WHERE COMMUNITY_ID = @id", _connection);
+        command.Parameters.AddWithValue("@id", id);
+
+        if (command.ExecuteNonQuery() > 0)
+        {
+            return 200;
+        }
+        return 204;
+    }
+
+    public int UpdateCommunity_Backend(int id, int memberCount, string tags, string post_id) //potential deletion if proposal 2.B goes through
+    {
+        CheckConnection();
+
+        SQLiteCommand command =
+            new SQLiteCommand("UPDATE COMMUNITY SET MEMBER_CNT = @memberCount, TAGS = @tags, POST_ID= @post_id, WHERE COMMUNITY_ID = @id", _connection);
+        command.Parameters.AddWithValue("@memberCount", memberCount);
+        command.Parameters.AddWithValue("@tags", tags);
+        command.Parameters.AddWithValue("@post_id", post_id);
+
+
+        if (command.ExecuteNonQuery() > 0)
+        {
+            return 200;
+        }
+        return 204;
+    }
+
+    public int LikeDislike_Count(int post_id, int like_count, int dislike_count)
+    {
+        CheckConnection();
+
+        SQLiteCommand command = new SQLiteCommand("UPDATE POST SET LIKE_COUNT =@like, DISLIKE_COUNT =@dislike, WHERE POST_ID= @post_id", _connection);
+
+
+        command.Parameters.AddWithValue("@like", like_count);
+        command.Parameters.AddWithValue("@dislike", dislike_count);
+        command.Parameters.AddWithValue("@post_id", post_id);
+
+
+        if (command.ExecuteNonQuery() > 0)
+        {
+            return 200;
+        }
+        return 204;
+    }
 
     private int GetUserIDs()
     {
+        CheckConnection();
+
         List<int> ids = new List<int>();
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM USER", _connection);
         SQLiteDataReader reader = command.ExecuteReader();
@@ -286,6 +415,8 @@ public class Database
 
     public int GetPostIDs()
     {
+        CheckConnection();
+
         List<int> ids = new List<int>();
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM POSTS", _connection);
         SQLiteDataReader reader = command.ExecuteReader();
@@ -316,6 +447,8 @@ public class Database
 
     private int GetCommIDs()
     {
+        CheckConnection();
+
         List<int> ids = new List<int>();
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM COMMUNITY", _connection);
         SQLiteDataReader reader = command.ExecuteReader();
@@ -342,90 +475,5 @@ public class Database
         }
         return temp + 1;
     }
-
-    public string GetCommunity(int id)
-    {
-        SQLiteCommand command = new SQLiteCommand("SELECT * FROM COMMUNITY WHERE COMMUNITY_ID = @id", _connection);
-        command.Parameters.AddWithValue("@id", id);
-        SQLiteDataReader reader = command.ExecuteReader();
-
-        if (reader.Read())
-        {
-            string communityName = reader.GetString(1);
-            string? communityDescription = reader.GetString(2);
-            string? img_path = reader.GetString(3);
-            int memberCount = reader.GetInt32(4);
-            string tags = reader.GetString(5);
-            string? post_IDS = reader.GetString(6);
-
-            return ($"ID: {id}, community name: {communityName}, Community description: {communityDescription}, Image Path: {img_path}, Member count: {memberCount}, Tags: {tags}, Post IDS: {post_IDS}");
-        }
-
-        return null;
-    }
-
-    public int UpdateCommunity_User(int id, string community_name, string community_description, string img_path, string tags)
-    {
-        SQLiteCommand command =
-            new SQLiteCommand("UPDATE COMMUNITY SET COMMUNITY_NAME = @community_name, COMMUNITY_DESCRIPTION = @community_description, IMAGE_PATH = @img_path, TAGS = @tags WHERE COMMUNITY_ID = @id",
-                _connection);
-        command.Parameters.AddWithValue("@id", id);
-        command.Parameters.AddWithValue("@community_name", community_name);
-        command.Parameters.AddWithValue("@community_description", community_description);
-        command.Parameters.AddWithValue("@img_path", img_path);
-        command.Parameters.AddWithValue("@tags", tags);
-
-        if (command.ExecuteNonQuery() > 0)
-        {
-            return 200;
-        }
-        return 204;
-    }
-    public int DeleteCommunity(int id)
-    {
-        SQLiteCommand command = new SQLiteCommand("DELETE FROM COMMUNITY WHERE COMMUNITY_ID = @id", _connection);
-        command.Parameters.AddWithValue("@id", id);
-
-        if (command.ExecuteNonQuery() > 0)
-        {
-            return 200;
-        }
-        return 204;
-    }
-
-    public int UpdateCommunity_Backend(int id, int memberCount, string tags, string post_id) //potential deletion if proposal 2.B goes through
-    {
-        SQLiteCommand command =
-            new SQLiteCommand("UPDATE COMMUNITY SET MEMBER_CNT = @memberCount, TAGS = @tags, POST_ID= @post_id, WHERE COMMUNITY_ID = @id", _connection);
-        command.Parameters.AddWithValue("@memberCount", memberCount);
-        command.Parameters.AddWithValue("@tags", tags);
-        command.Parameters.AddWithValue("@post_id", post_id);
-
-
-        if (command.ExecuteNonQuery() > 0)
-        {
-            return 200;
-        }
-        return 204;
-    }
-
-    public int LikeDislike_Count(int post_id, int like_count, int dislike_count)
-    {
-        SQLiteCommand command = new SQLiteCommand("UPDATE POST SET LIKE_COUNT =@like, DISLIKE_COUNT =@dislike, WHERE POST_ID= @post_id", _connection);
-
-
-        command.Parameters.AddWithValue("@like", like_count);
-        command.Parameters.AddWithValue("@dislike", dislike_count);
-        command.Parameters.AddWithValue("@post_id", post_id);
-
-
-        if (command.ExecuteNonQuery() > 0)
-        {
-            return 200;
-        }
-        return 204;
-    }
-
-
 
 }
