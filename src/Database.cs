@@ -5,11 +5,11 @@ namespace database;
 
 public class Database
 {
-    private SQLiteConnection _connection;
+    private SqliteConnection _connection;
 
     public Database()
     {
-        _connection = new SQLiteConnection("Data Source=src/GNUF.sqlite;Version=3;");
+        _connection = new SqliteConnection("Data Source=src/GNUF.sqlite;Version=3;");
         OpenConnection();
     }
 
@@ -43,9 +43,9 @@ public class Database
     {
         CheckConnection();
 
-        SQLiteCommand command = new SQLiteCommand("SELECT * FROM USER WHERE USER_NAME = @username", _connection);
+        SqliteCommand command = new SqliteCommand("SELECT * FROM USER WHERE USER_NAME = @username", _connection);
         command.Parameters.AddWithValue("@username", username);
-        SQLiteDataReader reader = command.ExecuteReader();
+        SqliteDataReader reader = command.ExecuteReader();
 
         if (reader.Read())
         {
@@ -73,7 +73,7 @@ public class Database
             return 204;
         }
         Int32 id = GetUserIDs();
-        SQLiteCommand command = new SQLiteCommand("INSERT INTO USER (EMAIL, USER_NAME, PASSWORD) VALUES (@email, @username, @password)", _connection);
+        SqliteCommand command = new SqliteCommand("INSERT INTO USER (EMAIL, USER_NAME, PASSWORD) VALUES (@email, @username, @password)", _connection);
         command.Parameters.AddWithValue("@email", email);
         command.Parameters.AddWithValue("@username", username);
         command.Parameters.AddWithValue("@password", password);
@@ -92,10 +92,10 @@ public class Database
     {
         CheckConnection();
 
-        SQLiteCommand command = new SQLiteCommand("SELECT * FROM USER WHERE USER_ID = @id", _connection);
+        SqliteCommand command = new SqliteCommand("SELECT * FROM USER WHERE USER_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
 
-        SQLiteDataReader reader = command.ExecuteReader();
+        SqliteDataReader reader = command.ExecuteReader();
         if (reader.Read())
         {
             string email = reader.GetString(1);
@@ -116,7 +116,7 @@ public class Database
     {
         CheckConnection();
 
-        SQLiteCommand command = new SQLiteCommand("DELETE FROM USER WHERE USER_ID = @id", _connection);
+        SqliteCommand command = new SqliteCommand("DELETE FROM USER WHERE USER_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
 
         if (command.ExecuteNonQuery() > 0)
@@ -130,8 +130,8 @@ public class Database
     {
         CheckConnection();
 
-        SQLiteCommand command =
-            new SQLiteCommand("UPDATE USER SET PASSWORD = @password, IMAGE_PATH = @img_path WHERE USER_ID = @id",
+        SqliteCommand command =
+            new SqliteCommand("UPDATE USER SET PASSWORD = @password, IMAGE_PATH = @img_path WHERE USER_ID = @id",
                 _connection);
         command.Parameters.AddWithValue("@id", id);
         command.Parameters.AddWithValue("@password", password);
@@ -148,7 +148,7 @@ public class Database
     {
         CheckConnection();
 
-        SQLiteCommand command = new SQLiteCommand("DELETE FROM POSTS WHERE POST_ID = @id", _connection);
+        SqliteCommand command = new SqliteCommand("DELETE FROM POSTS WHERE POST_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
 
         if (command.ExecuteNonQuery() > 0)
@@ -161,9 +161,9 @@ public class Database
     {
         CheckConnection();
 
-        SQLiteCommand command = new SQLiteCommand("SELECT * FROM POSTS WHERE POST_ID = @id", _connection);
+        SqliteCommand command = new SqliteCommand("SELECT * FROM POSTS WHERE POST_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
-        SQLiteDataReader reader = command.ExecuteReader();
+        SqliteDataReader reader = command.ExecuteReader();
 
         while (reader.Read())
         {
@@ -197,7 +197,7 @@ public class Database
     {
         CheckConnection();
 
-        SQLiteCommand command = new SQLiteCommand("UPDATE POSTS SET MAIN = @main, TITLE = @title  WHERE POST_ID = @id LIMIT 1", _connection);
+        SqliteCommand command = new SqliteCommand("UPDATE POSTS SET MAIN = @main, TITLE = @title  WHERE POST_ID = @id LIMIT 1", _connection);
         command.Parameters.AddWithValue("@id", post_id);
         command.Parameters.AddWithValue("@main", main);
         command.Parameters.AddWithValue("@title", title);
@@ -213,7 +213,7 @@ public class Database
     {
         CheckConnection();
 
-        SQLiteCommand command = new SQLiteCommand("UPDATE POSTS SET COMMENT_CNT = @comment_count, LIKES = @likes, DISLIKES = @dislikes, COMMENTS = @comments  WHERE POST_ID = @id LIMIT 1", _connection);
+        SqliteCommand command = new SqliteCommand("UPDATE POSTS SET COMMENT_CNT = @comment_count, LIKES = @likes, DISLIKES = @dislikes, COMMENTS = @comments  WHERE POST_ID = @id LIMIT 1", _connection);
         command.Parameters.AddWithValue("@id", post_id);
         command.Parameters.AddWithValue("@comment_count", comment_count);
         command.Parameters.AddWithValue("@likes", likes);
@@ -233,8 +233,8 @@ public class Database
 
         int id = GetPostIDs(); // Ensure this generates a unique ID
 
-        SQLiteCommand command =
-            new SQLiteCommand(
+        SqliteCommand command =
+            new SqliteCommand(
                 "INSERT INTO POSTS (POST_ID, TITLE, MAIN, AUTHOR_ID, COMMUNITY_ID, POST_ID_REF, COMMENT_FLAG, TIMESTAMP) VALUES (@id, @title, @main, @authID, @commID, @postIDRef, @comment, @time)",
                 _connection);
 
@@ -265,8 +265,8 @@ public class Database
 
         int id = GetCommIDs(); // Ensure this generates a unique ID
 
-        SQLiteCommand command =
-            new SQLiteCommand(
+        SqliteCommand command =
+            new SqliteCommand(
             "INSERT INTO COMMUNITY (COMMUNITY_ID, COMMUNITY_NAME, COMMUNITY_DESCRIPTION, IMAGE_PATH, MEMBER_CNT, TAGS, POST_IDs) VALUES (@id, @communityName, @communityDescription, @imagePath, @memberCount, @tags, @postIds)",
             _connection);
 
@@ -293,9 +293,9 @@ public class Database
     {
         CheckConnection();
 
-        SQLiteCommand command = new SQLiteCommand("SELECT * FROM COMMUNITY WHERE COMMUNITY_ID = @id", _connection);
+        SqliteCommand command = new SqliteCommand("SELECT * FROM COMMUNITY WHERE COMMUNITY_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
-        SQLiteDataReader reader = command.ExecuteReader();
+        SqliteDataReader reader = command.ExecuteReader();
 
         if (reader.Read())
         {
@@ -316,8 +316,8 @@ public class Database
     {
         CheckConnection();
 
-        SQLiteCommand command =
-            new SQLiteCommand("UPDATE COMMUNITY SET COMMUNITY_NAME = @community_name, COMMUNITY_DESCRIPTION = @community_description, IMAGE_PATH = @img_path, TAGS = @tags WHERE COMMUNITY_ID = @id",
+        SqliteCommand command =
+            new SqliteCommand("UPDATE COMMUNITY SET COMMUNITY_NAME = @community_name, COMMUNITY_DESCRIPTION = @community_description, IMAGE_PATH = @img_path, TAGS = @tags WHERE COMMUNITY_ID = @id",
                 _connection);
         command.Parameters.AddWithValue("@id", id);
         command.Parameters.AddWithValue("@community_name", community_name);
@@ -335,7 +335,7 @@ public class Database
     {
         CheckConnection();
 
-        SQLiteCommand command = new SQLiteCommand("DELETE FROM COMMUNITY WHERE COMMUNITY_ID = @id", _connection);
+        SqliteCommand command = new SqliteCommand("DELETE FROM COMMUNITY WHERE COMMUNITY_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
 
         if (command.ExecuteNonQuery() > 0)
@@ -349,8 +349,8 @@ public class Database
     {
         CheckConnection();
 
-        SQLiteCommand command =
-            new SQLiteCommand("UPDATE COMMUNITY SET MEMBER_CNT = @memberCount, TAGS = @tags, POST_IDs= @post_id WHERE COMMUNITY_ID = @id", _connection);
+        SqliteCommand command =
+            new SqliteCommand("UPDATE COMMUNITY SET MEMBER_CNT = @memberCount, TAGS = @tags, POST_IDs= @post_id WHERE COMMUNITY_ID = @id", _connection);
         command.Parameters.AddWithValue("@memberCount", memberCount);
         command.Parameters.AddWithValue("@tags", tags);
         command.Parameters.AddWithValue("@post_id", post_id);
@@ -368,7 +368,7 @@ public class Database
     {
         CheckConnection();
 
-        SQLiteCommand command = new SQLiteCommand("UPDATE POST SET LIKE_COUNT =@like, DISLIKE_COUNT =@dislike, WHERE POST_ID= @post_id", _connection);
+        SqliteCommand command = new SqliteCommand("UPDATE POST SET LIKE_COUNT =@like, DISLIKE_COUNT =@dislike, WHERE POST_ID= @post_id", _connection);
 
 
         command.Parameters.AddWithValue("@like", like_count);
@@ -388,8 +388,8 @@ public class Database
         CheckConnection();
 
         List<int> ids = new List<int>();
-        SQLiteCommand command = new SQLiteCommand("SELECT * FROM USER", _connection);
-        SQLiteDataReader reader = command.ExecuteReader();
+        SqliteCommand command = new SqliteCommand("SELECT * FROM USER", _connection);
+        SqliteDataReader reader = command.ExecuteReader();
         while (reader.Read())
         {
             ids.Add(reader.GetInt32(0));
@@ -419,8 +419,8 @@ public class Database
         CheckConnection();
 
         List<int> ids = new List<int>();
-        SQLiteCommand command = new SQLiteCommand("SELECT * FROM POSTS", _connection);
-        SQLiteDataReader reader = command.ExecuteReader();
+        SqliteCommand command = new SqliteCommand("SELECT * FROM POSTS", _connection);
+        SqliteDataReader reader = command.ExecuteReader();
         while (reader.Read())
         {
             ids.Add(reader.GetInt32(0));
@@ -451,8 +451,8 @@ public class Database
         CheckConnection();
 
         List<int> ids = new List<int>();
-        SQLiteCommand command = new SQLiteCommand("SELECT * FROM COMMUNITY", _connection);
-        SQLiteDataReader reader = command.ExecuteReader();
+        SqliteCommand command = new SqliteCommand("SELECT * FROM COMMUNITY", _connection);
+        SqliteDataReader reader = command.ExecuteReader();
         while (reader.Read())
         {
             ids.Add(reader.GetInt32(0));
