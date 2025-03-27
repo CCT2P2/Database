@@ -9,7 +9,7 @@ public class Database
 
     public Database()
     {
-        _connection = new SqliteConnection("Data Source=src/GNUF.sqlite;Version=3;");
+        _connection = new SqliteConnection("Data Source=src/GNUF.sqlite;");
         OpenConnection();
     }
 
