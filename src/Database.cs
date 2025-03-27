@@ -1,5 +1,5 @@
 using System.Data;
-using System.Data.SQLite;
+using Microsoft.Data.Sqlite;
 
 namespace database;
 
@@ -42,7 +42,7 @@ public class Database
     public int? LoginUser(string username, string password)
     {
         CheckConnection();
-        
+
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM USER WHERE USER_NAME = @username", _connection);
         command.Parameters.AddWithValue("@username", username);
         SQLiteDataReader reader = command.ExecuteReader();
@@ -67,7 +67,7 @@ public class Database
     //Registered user does not use first available ID, meaning if user.id 1 deletes account, user.id 1 will never be used again
     {
         CheckConnection();
-        
+
         if (LoginUser(username, "dummy") != null)
         {
             return 204;
@@ -91,7 +91,7 @@ public class Database
     public string? GetUser(int id)
     {
         CheckConnection();
-        
+
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM USER WHERE USER_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
 
@@ -115,7 +115,7 @@ public class Database
     public int? DeleteUser(int? id)
     {
         CheckConnection();
-        
+
         SQLiteCommand command = new SQLiteCommand("DELETE FROM USER WHERE USER_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
 
@@ -129,7 +129,7 @@ public class Database
     public int UpdateUser(int id, string img_path, string password)
     {
         CheckConnection();
-        
+
         SQLiteCommand command =
             new SQLiteCommand("UPDATE USER SET PASSWORD = @password, IMAGE_PATH = @img_path WHERE USER_ID = @id",
                 _connection);
@@ -147,7 +147,7 @@ public class Database
     public int DeletePost(int id)
     {
         CheckConnection();
-        
+
         SQLiteCommand command = new SQLiteCommand("DELETE FROM POSTS WHERE POST_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
 
@@ -160,7 +160,7 @@ public class Database
     public string GetPost(int id)
     {
         CheckConnection();
-        
+
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM POSTS WHERE POST_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
         SQLiteDataReader reader = command.ExecuteReader();
@@ -196,7 +196,7 @@ public class Database
     public int updatePostUser(int post_id, string title, string main)
     {
         CheckConnection();
-        
+
         SQLiteCommand command = new SQLiteCommand("UPDATE POSTS SET MAIN = @main, TITLE = @title  WHERE POST_ID = @id LIMIT 1", _connection);
         command.Parameters.AddWithValue("@id", post_id);
         command.Parameters.AddWithValue("@main", main);
@@ -212,7 +212,7 @@ public class Database
     public int updatePostBackend(int post_id, int comment_count, string comments, int likes, int dislikes) //potential deletion if proposal 2.B goes through
     {
         CheckConnection();
-        
+
         SQLiteCommand command = new SQLiteCommand("UPDATE POSTS SET COMMENT_CNT = @comment_count, LIKES = @likes, DISLIKES = @dislikes, COMMENTS = @comments  WHERE POST_ID = @id LIMIT 1", _connection);
         command.Parameters.AddWithValue("@id", post_id);
         command.Parameters.AddWithValue("@comment_count", comment_count);
@@ -230,7 +230,7 @@ public class Database
     public int CreatePost(string name, string main, int authID, int commID, int? postIdRef, bool comment)
     {
         CheckConnection();
-        
+
         int id = GetPostIDs(); // Ensure this generates a unique ID
 
         SQLiteCommand command =
@@ -262,7 +262,7 @@ public class Database
     public int CreateCommunity(string communityName, string communityDescription, string imagePath, int memberCount, string tags, int? postIds)
     {
         CheckConnection();
-        
+
         int id = GetCommIDs(); // Ensure this generates a unique ID
 
         SQLiteCommand command =
@@ -288,11 +288,11 @@ public class Database
 
         return 500; // Return 500 if the insert fails
     }
-    
+
     public string GetCommunity(int id)
     {
         CheckConnection();
-        
+
         SQLiteCommand command = new SQLiteCommand("SELECT * FROM COMMUNITY WHERE COMMUNITY_ID = @id", _connection);
         command.Parameters.AddWithValue("@id", id);
         SQLiteDataReader reader = command.ExecuteReader();
@@ -315,7 +315,7 @@ public class Database
     public int UpdateCommunity_User(int id, string community_name, string community_description, string img_path, string tags)
     {
         CheckConnection();
-        
+
         SQLiteCommand command =
             new SQLiteCommand("UPDATE COMMUNITY SET COMMUNITY_NAME = @community_name, COMMUNITY_DESCRIPTION = @community_description, IMAGE_PATH = @img_path, TAGS = @tags WHERE COMMUNITY_ID = @id",
                 _connection);

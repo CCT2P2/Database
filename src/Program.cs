@@ -8,7 +8,7 @@ public class Program
         Database db = new Database();
         // User_test(db);
         // Post_test(db);
-        Community_test(db);
+        // Community_test(db);
 
         /*
         var builder = WebApplication.CreateBuilder(args);
@@ -83,15 +83,15 @@ public class Program
     public static void Post_test(Database db)
     {
         // Create Post test succeded  [passed]
-        Console.WriteLine($"test Create Post: {db.CreatePost("man shitter","i love The Great Diddler he do be diddleing me",1,3,null,false)}");
+        Console.WriteLine($"test Create Post: {db.CreatePost("man shitter", "i love The Great Diddler he do be diddleing me", 1, 3, null, false)}");
 
         // fetch Post test succeded [passed]
         Console.WriteLine($"fetch Post test: {db.GetPost(106)}");
 
 
         // update Post tests succeded [passed]
-        Console.WriteLine($"update Post Test (User): {db.updatePostUser(106,"shitter man (Gone SEXUAL!!!!!??!?!!?!?)", "i love The Great Diddler he do be diddleing me in my little bumbum")}");
-        Console.WriteLine($"update Post Test (Backend): {db.updatePostBackend(106, 100324, "1,2,3,4",11345234,69420)}");
+        Console.WriteLine($"update Post Test (User): {db.updatePostUser(106, "shitter man (Gone SEXUAL!!!!!??!?!!?!?)", "i love The Great Diddler he do be diddleing me in my little bumbum")}");
+        Console.WriteLine($"update Post Test (Backend): {db.updatePostBackend(106, 100324, "1,2,3,4", 11345234, 69420)}");
 
         // fetch Post test to see if the update Post fucktions work [passed]
         Console.WriteLine($"fetch Post after update tests to see if they worked: {db.GetPost(106)}");
@@ -103,7 +103,7 @@ public class Program
     public static void Community_test(Database db)
     {
         // Create a Community test succeded  [passed]
-        Console.WriteLine($"test Create Post: {db.CreateCommunity("femboy Lovers", "man i love femboy and so do you", "/com/femoys.svg", 193, "sex",101)}");
+        Console.WriteLine($"test Create Post: {db.CreateCommunity("femboy Lovers", "man i love femboy and so do you", "/com/femoys.svg", 193, "sex", 101)}");
 
         // get Community invalid ID will fail [passed]
         Console.WriteLine($"fetch Community test: {db.GetCommunity(193)}");
@@ -113,17 +113,17 @@ public class Program
 
         // update Community user tests succeded [passed]
         Console.WriteLine($"update Community user test: {db.UpdateCommunity_User(4, "mega femboy Lovers", "man i love femboy and so do you, you submissive little femboy", "/com/femoys.svg", "sex")}");
-        
+
         // update Community user tests succeded [passed]
-        Console.WriteLine($"update Community Backend test: {db.UpdateCommunity_Backend(4, 1233454243,"sex, incest","102")}");
-        
+        Console.WriteLine($"update Community Backend test: {db.UpdateCommunity_Backend(4, 1233454243, "sex, incest", "102")}");
+
         // to see if the update fucktions work
         Console.WriteLine($"fetch Community test: {db.GetCommunity(4)}");
-        
-        
+
+
         // Delete community test [passed]
         Console.WriteLine($"Delete Community: {db.DeleteCommunity(4)}");
-        
-        
+
+
     }
 }
