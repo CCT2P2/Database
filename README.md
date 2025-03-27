@@ -1,8 +1,8 @@
-# 1. DB API specsheet  
-Time: 27-03-2025 @ 14:53
-Author: Sebastian Lindau-Skands @ GNUF | Backend    
-Reciever: GNUF | DB Team    
-Version: 1.6
+# 1. DB API specsheet   
+Time: 27-03-2025 @ 14:53   
+Author: Sebastian Lindau-Skands   
+Reciever: GNUF    
+Version: 1.6  
 
 # 2. Overview  
 DB: sqlite  
