@@ -285,6 +285,60 @@ Endpoint: `DELETE /api/post/remove/{post_id}`
 Desc: Deletes post  
 Response: `200 (ok)`  
 
+### 4.4.6 Get Multiple Posts
+Endpoint: `GET /api/posts` 
+Desc: Fetch multiple posts based on various filter parameters  
+
+Query parameters:
+```
+community_id: INT                 // Filter by community
+user_id: INT                      // Filter by author
+timestamp_start: INT              // Filter by post time (start)
+timestamp_end: INT                // Filter by post time (end)
+limit: INT                        // Max number of posts to return (default: 20, max: 100)
+offset: INT                       // Pagination offset (default: 0)
+sort_by: string                   // Options: "timestamp", "likes", "comments" (default: "timestamp")
+sort_order: string                // Options: "asc", "desc" (default: "desc")
+include_comments: boolean         // Whether to include comment posts (default: false)
+exclude_reposts: boolean          // Whether to exclude reposts (default: false)
+tags: [INT]                       // Filter by specific tags (optional)
+```
+
+Response:
+```json
+{
+  "posts": [
+    {
+      "post_id": "INT",
+      "title": "string",
+      "main_text": "string",
+      "auth_id": "INT",
+      "com_id": "INT",
+      "timestamp": "INT",
+      "likes": "INT",
+      "dislikes": "INT",
+      "post_id_ref": "INT",
+      "comment_flag": "boolean",
+      "comment_count": "INT"
+    }
+  ],
+  "total_count": "INT",
+  "next_offset": "INT"
+}
+```
+
+Notes:
+- All query parameters are optional
+- The response includes a `total_count` field indicating the total number of posts matching the filters
+- The response includes a `next_offset` field for scrolling/pagination (null if no more results)
+
+Examples for using it:
+- Community feed: ```/api/posts?community_id=123&sort_by=timestamp&sort_order=desc```
+- User profile posts: ```/api/posts?user_id=456&include_comments=false```
+- Recent popular posts: ```/api/posts?sort_by=likes&timestamp_start=1714503600```
+- Comment thread: ```/api/posts?post_id_ref=789&comment_flag=true&sort_by=timestamp&sort_order=asc```
+
+
 ## 4.5 Interactions  
 ### 4.5.1 Like / Dislike  
 Endpoint `PUT /api/post/vote/{post_id}`  
