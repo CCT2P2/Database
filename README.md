@@ -299,8 +299,6 @@ limit: INT                        // Max number of posts to return (default: 20,
 offset: INT                       // Pagination offset (default: 0)
 sort_by: string                   // Options: "timestamp", "likes", "comments" (default: "timestamp")
 sort_order: string                // Options: "asc", "desc" (default: "desc")
-include_comments: boolean         // Whether to include comment posts (default: false)
-exclude_reposts: boolean          // Whether to exclude reposts (default: false)
 tags: [INT]                       // Filter by specific tags (optional)
 ```
 
