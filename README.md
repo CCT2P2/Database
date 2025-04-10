@@ -331,10 +331,10 @@ Notes:
 - The response includes a `next_offset` field for scrolling/pagination (null if no more results)
 
 Examples for using it:
-- Community feed: ```/api/posts?community_id=123&sort_by=timestamp&sort_order=desc```
-- User profile posts: ```/api/posts?user_id=456&include_comments=false```
-- Recent popular posts: ```/api/posts?sort_by=likes&timestamp_start=1714503600```
-- Comment thread: ```/api/posts?post_id_ref=789&comment_flag=true&sort_by=timestamp&sort_order=asc```
+- Community feed: `/api/posts?community_id=123&sort_by=timestamp&sort_order=desc`
+- User profile posts: `/api/posts?user_id=456&include_comments=false`
+- Recent popular posts: `/api/posts?sort_by=likes&timestamp_start=1714503600`
+- Comment thread: `/api/posts?post_id_ref=789&comment_flag=true&sort_by=timestamp&sort_order=asc`
 
 
 ## 4.5 Interactions  
