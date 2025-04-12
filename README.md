@@ -37,6 +37,8 @@ Dedicated com-port for API: 5047
   COMMUNITY_IDs   INT\[\]                                                       Array of communities (FK to communities.id)
   ADMIN           BOOL      NOT NULL. DEFAULT FALSE                             ADMIN FLAG
   TAGS            INT\[\]                                                       Array of tags for content recommendation
+  DISPLAY_NAME    TEXT                                                          The display name of the user. Optional
+  DESCRIPTION     TEXT                                                          The description of the user. Optional
   ```
 
 ## 3.3 Posts  
@@ -105,11 +107,13 @@ Response:
     "id": "INT",
     "email": "string",
     "username": "string",
-    "img_path": "string",
-    "post_ids": ["INT"],
-    "community_ids": ["INT"],
-    "tags": ["INT"],
-    "admin": "boolean"
+    "img_path": "string" | "undefined",
+    "post_ids": ["INT"] | "undefined",
+    "community_ids": ["INT"] | "undefined",
+    "tags": ["INT"] | "undefined",
+    "admin": "boolean",
+    "display_name": "string" | "undefined",
+    "description: "string" | "undefined",
   }
 ```
 ### 4.2.2 Delete User Account  
