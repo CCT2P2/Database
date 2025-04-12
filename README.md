@@ -113,9 +113,11 @@ Response:
     "tags": ["INT"],
     "admin": "boolean",
     "display_name": "string",
-    "description: "string"
+    "description": "string" 
   }
 ```
+`img_path`, `post_ids`, `community_ids`, `display_name` and `description` are optional.
+
 ### 4.2.2 Delete User Account  
 Endpoint: `DELETE /api/user/remove/{user_id}`  
 desc: Deletes the account  
