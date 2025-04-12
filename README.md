@@ -107,13 +107,13 @@ Response:
     "id": "INT",
     "email": "string",
     "username": "string",
-    "img_path": "string" | "undefined",
-    "post_ids": ["INT"] | "undefined",
-    "community_ids": ["INT"] | "undefined",
-    "tags": ["INT"] | "undefined",
+    "img_path": "string",
+    "post_ids": ["INT"],
+    "community_ids": ["INT"],
+    "tags": ["INT"],
     "admin": "boolean",
-    "display_name": "string" | "undefined",
-    "description: "string" | "undefined",
+    "display_name": "string",
+    "description: "string"
   }
 ```
 ### 4.2.2 Delete User Account  
