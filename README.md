@@ -100,7 +100,7 @@ Response:
 ## 4.2 User Management  
 ### 4.2.1 Get User Profile  
 Endpoint: `GET /api/user/profile/{user_id}`  
-Desc: Retrieve user data  
+Desc: Retrieve user data. `img_path`, `post_ids`, `community_ids`, `display_name` and `description` are optional
 Response:  
 ```json
   {
@@ -116,7 +116,6 @@ Response:
     "description": "string" 
   }
 ```
-`img_path`, `post_ids`, `community_ids`, `display_name` and `description` are optional.
 
 ### 4.2.2 Delete User Account  
 Endpoint: `DELETE /api/user/remove/{user_id}`  
